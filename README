@@ -1,0 +1,20 @@
+# $Id$
+
+Install this module using the normal Perl module installation steps.
+
+    perl Makefile.PL
+    make
+    make test # see note below
+    make install
+    
+If you want to read the module documentation before you install the
+module, try
+
+	perldoc lib/Vendor.pm
+	
+After you install the module, you can read the documentation like
+any other Perl module.
+
+	perldoc Net::MAC::Vendor
+	
+Feel free to send me feedback---brian d foy <bdfoy@cpan.org>
