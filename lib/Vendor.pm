@@ -10,11 +10,11 @@ Net::MAC::Vendor - look up the vendor for a MAC
 =head1 SYNOPSIS
 
 	use Net::MAC::Vendor;
-	
+
 	my $mac = "00:0d:93:29:f6:c2";
-	
+
 	my $array = Net::MAC::Vendor::lookup( $mac );
-	
+
 =head1 DESCRIPTION
 
 The Institute of Electrical and Electronics Engineers (IEEE) assigns
@@ -32,7 +32,14 @@ You can use this as a module as its individual functions, or call
 it as a script with a list of MAC addresses as arguments.  The
 module can figure it out.
 
+This module tries to persitently cache with DBM::Deep the
+OUI information so it can avoid using the network.  If it
+cannot load DBM::Deep, it uses a normal hash (which is lost
+when the process finishes).
+
 =head2 Functions
+
+=over 4
 
 =cut
 
@@ -62,9 +69,9 @@ discovers.
 
 This method does try to use a cache of OUI to cut down on the
 times it has to access the network.  If the cache is fully
-loaded (perhaps using load_cache), it may not even use the 
+loaded (perhaps using load_cache), it may not even use the
 network at all.
- 
+
 =cut
 
 sub run
@@ -96,13 +103,13 @@ lines.
 sub lookup
 	{
 	my $mac   = shift;
-	
-	my $mac   = normalize_mac( $mac );
+
+	   $mac   = normalize_mac( $mac );
 	my $lines = fetch_oui( $mac );
 
 	return $lines;
 	}
-	
+
 =item normalize_mac( MAC )
 
 Takes a MAC address and turns it into the form I need to
@@ -125,7 +132,7 @@ sub normalize_mac
 
 =item fetch_oui( MAC )
 
-Looks up the OUI information on the IEEE website, or uses a 
+Looks up the OUI information on the IEEE website, or uses a
 cached version of it.  Pass it the result of normalize_mac
 and you should be fine.
 
