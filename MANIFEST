@@ -9,3 +9,4 @@ t/normalize_mac.t
 t/parse_oui.t
 t/pod.t
 t/test_manifest
+README
