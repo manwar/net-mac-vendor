@@ -15,6 +15,12 @@ Net::MAC::Vendor - look up the vendor for a MAC
 
 	my $array = Net::MAC::Vendor::lookup( $mac );
 
+You can also run this as a script with as many arguments as you
+like.  The module realizes it is a script, looks up the information
+for each MAC, and outputs it.
+
+	perl Net/Mac/Vendor.pm 00:0d:93:29:f6:c2 00:0d:93:29:f6:c5
+	
 =head1 DESCRIPTION
 
 The Institute of Electrical and Electronics Engineers (IEEE) assigns
@@ -35,7 +41,11 @@ module can figure it out.
 This module tries to persitently cache with DBM::Deep the
 OUI information so it can avoid using the network.  If it
 cannot load DBM::Deep, it uses a normal hash (which is lost
-when the process finishes).
+when the process finishes).  You can preload this cache with
+the load_cache() function.  So far, the module looks in the
+current working directory for a file named mac_oui.db to find
+the cache. I need to come up with a way to let the user set
+that location.
 
 =head2 Functions
 
@@ -47,6 +57,7 @@ use base qw(Exporter);
 
 __PACKAGE__->run( @ARGV ) unless caller;
 
+use Carp;
 use LWP::Simple qw(get);
 
 # http://standards.ieee.org/regauth/oui/oui.txt
@@ -57,7 +68,7 @@ our %Cached = do {
 		();
 		};
 
-our $VERSION = 0.21;
+our $VERSION = 0.22;
 
 =item run( @macs )
 
@@ -96,7 +107,11 @@ sub run
 Given the MAC address, return an anonymous array with the vendor
 information. The first element is the OUI, the second element
 is the vendor name, and the remaining elements are the address
-lines.
+lines. Different records may have different numbers of lines,
+although the first two should be consistent.
+
+The normalize_mac() function explains the possible formants
+for MAC.
 
 =cut
 
@@ -117,16 +132,34 @@ send to the IEEE lookup, which is the first six bytes in hex
 separated by hyphens.  For instance, 00:0d:93:29:f6:c2 turns
 into 00-0D-93.
 
+The input string can be a separated by colons or hyphens. They
+can omit leading 0's (which might make things look odd).  We
+only need the first three bytes
+
+	00:0d:93:29:f6:c2   # usual form
+	
+	00-0d-93-29-f6-c2   # with hyphens
+	
+	00:0d:93            # first three bytes
+	
+	0:d:93              # missing leading zero
+	
+	:d:93               # missing all leading zeros
+	
 =cut
 
 sub normalize_mac
 	{
-	my $mac = shift;
+	my $input = uc shift;
 
-	my @bits = split /[:-]/, $mac;
-
-	$mac = join "-", map { sprintf "%02X", hex } @bits[0..2];
-
+	my $mac   = join "-",
+		grep { /^[0-9A-F]{2}$/ } 
+		map { sprintf "%02X", hex }
+		( split /[:-]/, $input )[0..2];
+	
+	$mac = undef unless $mac =~ /^[0-9A-F]{2}-[0-9A-F]{2}-[0-9A-F]{2}$/;
+	carp "Could not normalize MAC [$input]" unless $mac;
+	
 	return $mac;
 	}
 
@@ -136,12 +169,15 @@ Looks up the OUI information on the IEEE website, or uses a
 cached version of it.  Pass it the result of normalize_mac
 and you should be fine.
 
+The normalize_mac() function explains the possible formants
+for MAC.
+
 =cut
 
 sub fetch_oui
 	{
-	my $mac = shift;
-
+	my $mac = normalize_mac( shift );
+	
 	exists $Cached{ $mac } ?
 		$Cached{ $mac }   :
 		parse_oui(
@@ -169,7 +205,7 @@ sub extract_oui_from_html
 	return $oui;
 	}
 
-=item parse_oui
+=item parse_oui( STRING )
 
 Takes a string that looks like
 
@@ -179,7 +215,7 @@ Takes a string that looks like
 								Cupertino CA 95014
 								UNITED STATES
 
-and turns it into an array of lines.  It discard the first
+and turns it into an array of lines.  It discards the first
 line, strips the leading information from the second line,
 and strips the leading whitespace from all of the lines.
 
@@ -242,7 +278,7 @@ brian d foy C<< <bdfoy@cpan.org> >>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2004, brian d foy, All Rights Reserved.
+Copyright (c) 2004-2005, brian d foy, All Rights Reserved.
 
 You may redistribute this under the same terms as Perl itself.
 

@@ -1,20 +1,28 @@
 # $Id$
 
-use Test::More tests => 7;
+use Test::More tests => 5;
+
+use LWP::Simple qw(get);
 
 use_ok( 'Net::MAC::Vendor' );
 
 my @oui = qw( 00-0D-93 );
 
-Net::MAC::Vendor::fetch_oui( $mac );
+my $connected = get( 'http://standards.ieee.org/regauth/oui/oui.txt' );
+
+SKIP: {
+skip "Can't connect to the IEEE web site", 4 unless $connected;
+
+Net::MAC::Vendor::fetch_oui( $oui[0] );
 
 my $lines =
 	[
-	'Calrec Audio Ltd',
-	'Nutclough Mill',
-	'Hebden Bridge West Yorkshire HX7 8EZ',
-	'UNITED KINGDOM',
-	]
+	'Apple Computer',
+	'1 Infinite Loop',
+	'Cupertino CA 95014',
+	'UNITED STATES',
+	];
+	
 # # # # # # # # # # # # # # # # # # #
           
 foreach my $oui ( @oui )
@@ -26,3 +34,5 @@ foreach my $oui ( @oui )
 		is( $parsed->[$i], $lines->[$i], "Line $i matches" );
 		}
 	}
+
+}
