@@ -68,7 +68,7 @@ our %Cached = do {
 		();
 		};
 
-our $VERSION = 0.22;
+our $VERSION = 0.23;
 
 =item run( @macs )
 
