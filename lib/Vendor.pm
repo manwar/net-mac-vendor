@@ -38,7 +38,7 @@ You can use this as a module as its individual functions, or call
 it as a script with a list of MAC addresses as arguments.  The
 module can figure it out.
 
-This module tries to persitently cache with DBM::Deep the
+This module tries to persistently cache with DBM::Deep the
 OUI information so it can avoid using the network.  If it
 cannot load DBM::Deep, it uses a normal hash (which is lost
 when the process finishes).  You can preload this cache with
