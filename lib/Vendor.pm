@@ -20,7 +20,7 @@ like.  The module realizes it is a script, looks up the information
 for each MAC, and outputs it.
 
 	perl Net/Mac/Vendor.pm 00:0d:93:29:f6:c2 00:0d:93:29:f6:c5
-	
+
 =head1 DESCRIPTION
 
 The Institute of Electrical and Electronics Engineers (IEEE) assigns
@@ -137,15 +137,15 @@ can omit leading 0's (which might make things look odd).  We
 only need the first three bytes
 
 	00:0d:93:29:f6:c2   # usual form
-	
+
 	00-0d-93-29-f6-c2   # with hyphens
-	
+
 	00:0d:93            # first three bytes
-	
+
 	0:d:93              # missing leading zero
-	
+
 	:d:93               # missing all leading zeros
-	
+
 =cut
 
 sub normalize_mac
@@ -153,13 +153,13 @@ sub normalize_mac
 	my $input = uc shift;
 
 	my $mac   = join "-",
-		grep { /^[0-9A-F]{2}$/ } 
+		grep { /^[0-9A-F]{2}$/ }
 		map { sprintf "%02X", hex }
 		( split /[:-]/, $input )[0..2];
-	
+
 	$mac = undef unless $mac =~ /^[0-9A-F]{2}-[0-9A-F]{2}-[0-9A-F]{2}$/;
 	carp "Could not normalize MAC [$input]" unless $mac;
-	
+
 	return $mac;
 	}
 
@@ -177,7 +177,7 @@ for MAC.
 sub fetch_oui
 	{
 	my $mac = normalize_mac( shift );
-	
+
 	exists $Cached{ $mac } ?
 		$Cached{ $mac }   :
 		parse_oui(

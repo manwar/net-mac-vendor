@@ -4,7 +4,7 @@ Makefile$
 .DS_Store
 .*gz
 Net-MAC-.*
-MANIFEST\.*
+MANIFEST\.
 blib/
 CVS
 pm_to_blib
