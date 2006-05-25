@@ -1,5 +1,9 @@
 # $Id$
 
+1.01 - Thu May 25 03:58:41 2006
+	* The last release forgot to bump the version number. There's no
+	need to upgrade since this only fixes a missing MANIFEST.
+
 0.24 - Thu May 25 03:31:33 2006
 	* MANIFEST was missing from diff. I've fixed that.
 
