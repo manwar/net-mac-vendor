@@ -1,5 +1,8 @@
 # $Id$
 
+0.24 - Thu May 25 03:31:33 2006
+	* MANIFEST was missing from diff. I've fixed that.
+
 0.24 - Sat May 20 02:59:48 2006
 	* Minor distro updates, kwalitee cleanups, and typo squashing.
 	No need to upgrade.
