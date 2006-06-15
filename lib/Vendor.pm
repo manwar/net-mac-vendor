@@ -68,7 +68,7 @@ our %Cached = do {
 		();
 		};
 
-our $VERSION = 1.01;
+our $VERSION = sprintf "%d.%02d", q$Revision$ =~ m/ (\d+) \. (\d+) /xg;
 
 =item run( @macs )
 
@@ -172,6 +172,9 @@ and you should be fine.
 The normalize_mac() function explains the possible formants
 for MAC.
 
+To avoid multiple calls on the network, use C<load_cache> to preload
+the entire OUI space into an in-memory cache.
+
 =cut
 
 sub fetch_oui
@@ -193,6 +196,9 @@ Gets rid of the HTML around the OUI information.  It may still be
 ugly. The HTML is the search results page of the IEEE ouisearch
 lookup.
 
+Returns false if it could not extract the information. This could
+mean unexpected input or a change in format.
+
 =cut
 
 sub extract_oui_from_html
@@ -200,6 +206,8 @@ sub extract_oui_from_html
 	my $html = shift;
 
 	my( $oui ) = $html =~ m|<pre>(.*?)</pre>|gs;
+	return unless defined $oui;
+	
 	$oui =~ s|</?b>||g;
 
 	return $oui;
@@ -219,12 +227,14 @@ and turns it into an array of lines.  It discards the first
 line, strips the leading information from the second line,
 and strips the leading whitespace from all of the lines.
 
+With no arguments, it returns an empty anonymous array.
 =cut
 
 sub parse_oui
 	{
 	my $oui = shift;
-
+	return [] unless $oui;
+	
 	my @lines = map { $_ =~ s/^\s+|\s+$//; $_ ? $_ : () } split /$/m, $oui;
 	splice @lines, 1, 1, ();
 
@@ -232,17 +242,23 @@ sub parse_oui
 	return \@lines;
 	}
 
-=item load_cache
+=item load_cache( [ SOURCE ] )
 
 Downloads the current list of all OUIs, parses it with parse_oui(),
 and stores it in %Cached keyed by the OUIs (i.e. 00-0D-93).  The
 fetch_oui() will use this cache if it exists.
 
+By default, this uses C<http://standards.ieee.org/regauth/oui/oui.txt> ,
+but given an argument, it tries to use that. To load from a local file,
+use the C<file://> scheme.
+
 =cut
 
 sub load_cache
 	{
-	my $data = get( "http://standards.ieee.org/regauth/oui/oui.txt" );
+	my $source = shift || "http://standards.ieee.org/regauth/oui/oui.txt";
+	
+	my $data = get( $source );
 
 	my @entries = split /\n\n/, $data;
 	shift @entries;
