@@ -1,6 +1,6 @@
 # $Id$
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 
 use LWP::Simple qw(head);
 
@@ -48,8 +48,20 @@ foreach my $oui ( @oui )
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-{
-Net::MAC::Vendor::load_cache();
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+SKIP: {
+require Cwd;
+require File::Spec;
+
+my $cwd  = Cwd::cwd();
+my $path = File::Spec->catfile( $cwd, "extras/oui-20060623.txt" );
+
+skip "Can't get path to data file [$path]", 4 unless -e $path;
+
+my $uri  = "file://" . $path;
+
+Net::MAC::Vendor::load_cache( $uri );
+ok( -e 'mac_oui.db', "Cache file exists" );
 
 my $lines =
 	[
@@ -61,7 +73,7 @@ my $lines =
 
 foreach my $oui ( @oui )
 	{
-	my $parsed = Net::MAC::Vendor::fetch_ouifrom_cache( $oui );
+	my $parsed = Net::MAC::Vendor::fetch_oui_from_cache( $oui );
 
 	foreach my $i ( 0 .. $#$parsed )
 		{
@@ -69,4 +81,6 @@ foreach my $oui ( @oui )
 		}
 	}
 
+unlink( 'mac_oui.db' );
+ok( ! -e 'mac_oui.db', "Cache file has been unlinked" );
 }

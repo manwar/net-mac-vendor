@@ -61,10 +61,10 @@ use LWP::Simple qw(get);
 
 # http://standards.ieee.org/regauth/oui/oui.txt
 
-our %Cached = do {
-	eval "use DBM::Deep" ?
+our $Cached = do {
+	eval "require DBM::Deep" ?
 		DBM::Deep->new( $ENV{NET_MAC_VENDOR_CACHE} || 'mac_oui.db' ) :
-		();
+		{};
 		};
 
 our $VERSION = sprintf "%d.%02d", q$Revision$ =~ m/ (\d+) \. (\d+) /xg;
@@ -172,7 +172,8 @@ The C<normalize_mac()> function explains the possible formants for
 MAC.
 
 To avoid multiple calls on the network, use C<load_cache> to preload
-the entire OUI space into an in-memory cache.
+the entire OUI space into an in-memory cache. This can take a long
+time over a slow network, thoug; the file is about 60,000 lines.
 
 =cut
 
@@ -221,7 +222,7 @@ sub fetch_oui_from_cache
 	{
 	my $mac = normalize_mac( shift );
 
-	exists $Cached{ $mac } ? $Cached{ $mac } : ();
+	exists $Cached->{ $mac } ? $Cached->{ $mac } : ();
 	}
 
 =item extract_oui_from_html( HTML )
@@ -280,10 +281,11 @@ sub parse_oui
 =item load_cache( [ SOURCE ] )
 
 Downloads the current list of all OUIs, parses it with C<parse_oui()>,
-and stores it in C<%Cached> keyed by the OUIs (i.e. 00-0D-93).  The
-C<fetch_oui()> will use this cache if it exists. The cache is stored
-as a C<DBM::Deep> file named after the C<NET_MAC_VENDOR_CACHE>
-environment variable, or C<mac_oui.db> by default.
+and stores it in C<$Cached> anonymous hash keyed by the OUIs (i.e.
+00-0D-93).  The C<fetch_oui()> will use this cache if it exists. The
+cache is stored as a C<DBM::Deep> file named after the
+C<NET_MAC_VENDOR_CACHE> environment variable, or C<mac_oui.db> by
+default.
 
 By default, this uses C<http://standards.ieee.org/regauth/oui/oui.txt>
 , but given an argument, it tries to use that. To load from a local
@@ -314,7 +316,7 @@ sub load_cache
 		{
 		$entry =~ s/^\s+|\s+$//;
 		my $oui = substr $entry, 0, 8;
-		$Cached{ $oui } = parse_oui( $entry );
+		$Cached->{ $oui } = parse_oui( $entry );
 		}
 	}
 
