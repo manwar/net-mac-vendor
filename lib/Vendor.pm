@@ -24,28 +24,27 @@ for each MAC, and outputs it.
 =head1 DESCRIPTION
 
 The Institute of Electrical and Electronics Engineers (IEEE) assigns
-an Organizational Unique Identifier (OUI) to manufacturers of
-network interfaces.  Each interface has a Media Access Control (MAC)
-address of six bytes.  The first three bytes are the OUI.
+an Organizational Unique Identifier (OUI) to manufacturers of network
+interfaces.  Each interface has a Media Access Control (MAC) address
+of six bytes.  The first three bytes are the OUI.
 
-This module allows you to take a MAC address and turn it into the
-OUI and vendor information.  You can, for instance, scan a network,
+This module allows you to take a MAC address and turn it into the OUI
+and vendor information.  You can, for instance, scan a network,
 collect MAC addresses, and turn those addresses into vendors.  With
 vendor information, you can often guess at what what you are looking
 at (e.g. an Apple product).
 
-You can use this as a module as its individual functions, or call
-it as a script with a list of MAC addresses as arguments.  The
-module can figure it out.
+You can use this as a module as its individual functions, or call it
+as a script with a list of MAC addresses as arguments.  The module can
+figure it out.
 
-This module tries to persistently cache with DBM::Deep the
-OUI information so it can avoid using the network.  If it
-cannot load DBM::Deep, it uses a normal hash (which is lost
-when the process finishes).  You can preload this cache with
-the load_cache() function.  So far, the module looks in the
-current working directory for a file named mac_oui.db to find
-the cache. I need to come up with a way to let the user set
-that location.
+This module tries to persistently cache with DBM::Deep the OUI
+information so it can avoid using the network.  If it cannot load
+DBM::Deep, it uses a normal hash (which is lost when the process
+finishes).  You can preload this cache with the load_cache() function.
+ So far, the module looks in the current working directory for a file
+named mac_oui.db to find the cache. I need to come up with a way to
+let the user set that location.
 
 =head2 Functions
 
@@ -64,7 +63,7 @@ use LWP::Simple qw(get);
 
 our %Cached = do {
 	eval "use DBM::Deep" ?
-		DBM::Deep->new( 'mac_oui.db' ) :
+		DBM::Deep->new( $ENV{NET_MAC_VENDOR_CACHE} || 'mac_oui.db' ) :
 		();
 		};
 
@@ -80,7 +79,7 @@ discovers.
 
 This method does try to use a cache of OUI to cut down on the
 times it has to access the network.  If the cache is fully
-loaded (perhaps using load_cache), it may not even use the
+loaded (perhaps using C<load_cache>), it may not even use the
 network at all.
 
 =cut
@@ -165,12 +164,12 @@ sub normalize_mac
 
 =item fetch_oui( MAC )
 
-Looks up the OUI information on the IEEE website, or uses a
-cached version of it.  Pass it the result of normalize_mac
-and you should be fine.
+Looks up the OUI information on the IEEE website, or uses a cached
+version of it.  Pass it the result of C<normalize_mac()> and you
+should be fine.
 
-The normalize_mac() function explains the possible formants
-for MAC.
+The C<normalize_mac()> function explains the possible formants for
+MAC.
 
 To avoid multiple calls on the network, use C<load_cache> to preload
 the entire OUI space into an in-memory cache.
@@ -179,15 +178,50 @@ the entire OUI space into an in-memory cache.
 
 sub fetch_oui
 	{
+	fetch_oui_from_cache( $_[0] ) || &fetch_oui_from_ieee( $_[0] );	
+	}
+
+=item fetch_oui_from_ieee( MAC )
+
+Looks up the OUI information on the IEEE website. Pass it the result
+of C<normalize_mac()> and you should be fine.
+
+The C<normalize_mac()> function explains the possible formants for
+MAC.
+
+=cut
+
+sub fetch_oui_from_ieee
+	{
 	my $mac = normalize_mac( shift );
 
-	exists $Cached{ $mac } ?
-		$Cached{ $mac }   :
-		parse_oui(
-			extract_oui_from_html(
-				get( "http://standards.ieee.org/cgi-bin/ouisearch?$mac" )
-				)
-			);
+	parse_oui(
+		extract_oui_from_html(
+			get( "http://standards.ieee.org/cgi-bin/ouisearch?$mac" )
+			)
+		);
+	}
+
+=item fetch_oui_from_cache( MAC )
+
+Looks up the OUI information in the cached OUI information (see
+C<load_cache>).
+
+The C<normalize_mac()> function explains the possible formats for
+MAC.
+
+To avoid multiple calls on the network, use C<load_cache> to preload
+the entire OUI space into an in-memory cache.
+
+If it doesn't find the MAC in the cache, it returns nothing.
+
+=cut
+
+sub fetch_oui_from_cache
+	{
+	my $mac = normalize_mac( shift );
+
+	exists $Cached{ $mac } ? $Cached{ $mac } : ();
 	}
 
 =item extract_oui_from_html( HTML )
@@ -228,6 +262,7 @@ line, strips the leading information from the second line,
 and strips the leading whitespace from all of the lines.
 
 With no arguments, it returns an empty anonymous array.
+
 =cut
 
 sub parse_oui
@@ -244,13 +279,18 @@ sub parse_oui
 
 =item load_cache( [ SOURCE ] )
 
-Downloads the current list of all OUIs, parses it with parse_oui(),
-and stores it in %Cached keyed by the OUIs (i.e. 00-0D-93).  The
-fetch_oui() will use this cache if it exists.
+Downloads the current list of all OUIs, parses it with C<parse_oui()>,
+and stores it in C<%Cached> keyed by the OUIs (i.e. 00-0D-93).  The
+C<fetch_oui()> will use this cache if it exists. The cache is stored
+as a C<DBM::Deep> file named after the C<NET_MAC_VENDOR_CACHE>
+environment variable, or C<mac_oui.db> by default.
 
-By default, this uses C<http://standards.ieee.org/regauth/oui/oui.txt> ,
-but given an argument, it tries to use that. To load from a local file,
-use the C<file://> scheme.
+By default, this uses C<http://standards.ieee.org/regauth/oui/oui.txt>
+, but given an argument, it tries to use that. To load from a local
+file, use the C<file://> scheme.
+
+If C<load_cache> cannot load the data, it issues a warning and returns
+nothing.
 
 =cut
 
@@ -258,7 +298,13 @@ sub load_cache
 	{
 	my $source = shift || "http://standards.ieee.org/regauth/oui/oui.txt";
 	
-	my $data = get( $source );
+	my $data;
+	
+	unless( $data = get( $source ) )
+		{
+		carp "Could not read from '$source'";
+		return;
+		}
 
 	my @entries = split /\n\n/, $data;
 	shift @entries;
