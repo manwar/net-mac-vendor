@@ -1,5 +1,14 @@
 # $Id$
 
+1.13 - Fri Jun 23 15:01:56 2006
+	* Improved caching that uses DBM::Deep if available
+	* Added fetch_oui_from_cache, so you can avoid the network
+	if you really don't want to use it
+	* Added fetch_oui_from_ieee, if you only want to fetch it
+	from the network (and not from cache)
+	* fetch_oui now comprises those two functions, trying the
+	cache first
+
 1.11 - Fri Jun 16 01:06:31 2006
 	* Load any oui.txt source that you like (another URL or local 
 	file://)
