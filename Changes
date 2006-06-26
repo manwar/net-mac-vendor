@@ -1,5 +1,9 @@
 # $Id$
 
+1.15 - Sun Jun 25 22:08:28 2006
+	* Fixed up missing dependency, error in fetch_oui.t that 
+	should have been a conditional test
+
 1.13 - Fri Jun 23 15:01:56 2006
 	* Improved caching that uses DBM::Deep if available
 	* Added fetch_oui_from_cache, so you can avoid the network
