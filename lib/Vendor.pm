@@ -179,7 +179,7 @@ time over a slow network, thoug; the file is about 60,000 lines.
 
 sub fetch_oui
 	{
-	fetch_oui_from_cache( $_[0] ) || fetch_oui_from_ieee( $_[0] );	
+	fetch_oui_from_cache( $_[0] ) || fetch_oui_from_ieee( $_[0] );
 	}
 
 =item fetch_oui_from_ieee( MAC )
@@ -242,7 +242,7 @@ sub extract_oui_from_html
 
 	my( $oui ) = $html =~ m|<pre>(.*?)</pre>|gs;
 	return unless defined $oui;
-	
+
 	$oui =~ s|</?b>||g;
 
 	return $oui;
@@ -270,7 +270,7 @@ sub parse_oui
 	{
 	my $oui = shift;
 	return [] unless $oui;
-	
+
 	my @lines = map { $_ =~ s/^\s+|\s+$//; $_ ? $_ : () } split /$/m, $oui;
 	splice @lines, 1, 1, ();
 
@@ -299,9 +299,9 @@ nothing.
 sub load_cache
 	{
 	my $source = shift || "http://standards.ieee.org/regauth/oui/oui.txt";
-	
+
 	my $data;
-	
+
 	unless( $data = get( $source ) )
 		{
 		carp "Could not read from '$source'";
