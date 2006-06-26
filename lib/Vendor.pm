@@ -179,7 +179,7 @@ time over a slow network, thoug; the file is about 60,000 lines.
 
 sub fetch_oui
 	{
-	fetch_oui_from_cache( $_[0] ) || &fetch_oui_from_ieee( $_[0] );	
+	fetch_oui_from_cache( $_[0] ) || fetch_oui_from_ieee( $_[0] );	
 	}
 
 =item fetch_oui_from_ieee( MAC )

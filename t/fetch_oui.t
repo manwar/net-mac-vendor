@@ -61,8 +61,12 @@ skip "Can't get path to data file [$path]", 4 unless -e $path;
 my $uri  = "file://" . $path;
 
 Net::MAC::Vendor::load_cache( $uri );
-ok( -e 'mac_oui.db', "Cache file exists" );
 
+SKIP: {
+	skip "No DBM::Deep", 1 unless eval "require DBM::Deep";
+	ok( -e 'mac_oui.db', "Cache file exists" );
+	}
+	
 my $lines =
 	[
 	'Apple Computer',

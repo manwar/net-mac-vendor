@@ -9,6 +9,7 @@ WriteMakefile(
 
 	'PREREQ_PM'    => { 
 		'Test::More'        => '0',
+		'LWP::Simple'       => '0',
 		},
 
 	'PM'           => {
