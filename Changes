@@ -1,5 +1,10 @@
 # $Id$
 
+1.16 - Fri Nov 17 10:23:46 2006
+	* Fixed case-typo in docs s/Mac/MAC/. That's important to some 
+	operating systems. :)
+	* No code updates.
+
 1.15 - Sun Jun 25 22:08:28 2006
 	* Fixed up missing dependency, error in fetch_oui.t that 
 	should have been a conditional test
