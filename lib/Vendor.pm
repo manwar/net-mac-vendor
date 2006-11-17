@@ -19,7 +19,7 @@ You can also run this as a script with as many arguments as you
 like.  The module realizes it is a script, looks up the information
 for each MAC, and outputs it.
 
-	perl Net/Mac/Vendor.pm 00:0d:93:29:f6:c2 00:0d:93:29:f6:c5
+	perl Net/MAC/Vendor.pm 00:0d:93:29:f6:c2 00:0d:93:29:f6:c5
 
 =head1 DESCRIPTION
 
