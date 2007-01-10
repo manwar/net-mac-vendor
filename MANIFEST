@@ -1,6 +1,7 @@
 Changes
 extras/oui-20060623.txt
 lib/Vendor.pm
+LICENSE
 Makefile.PL
 MANIFEST
 META.yml			Module meta-data (added by MakeMaker)
