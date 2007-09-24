@@ -6,8 +6,9 @@ eval "use Test::Manifest 1.14";
 WriteMakefile(
 	'NAME'	       => 'Net::MAC::Vendor',
 	'VERSION_FROM' => 'lib/Vendor.pm',
-	'LICENSE'       => 'perl',
-
+	'LICENSE'      => 'perl',
+	'AUTHOR'       => 'brian d foy <bdfoy@cpan.org>',
+	
 	'PREREQ_PM'    => { 
 		'Test::More'        => '0',
 		'LWP::Simple'       => '0',
