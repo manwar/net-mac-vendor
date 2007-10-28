@@ -5,7 +5,6 @@ lib/Vendor.pm
 LICENSE
 Makefile.PL
 MANIFEST
-META.yml			Module meta-data (added by MakeMaker)
 README
 t/compile.t
 t/extract_oui_from_html.t

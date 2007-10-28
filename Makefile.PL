@@ -5,6 +5,7 @@ eval "use Test::Manifest 1.14";
 
 WriteMakefile(
 	'NAME'	       => 'Net::MAC::Vendor',
+	'ABSTRACT'     => 'look up the network interface vendor by MAC',
 	'VERSION_FROM' => 'lib/Vendor.pm',
 	'LICENSE'      => 'perl',
 	'AUTHOR'       => 'brian d foy <bdfoy@cpan.org>',

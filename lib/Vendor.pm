@@ -67,7 +67,7 @@ our $Cached = do {
 		{};
 		};
 
-our $VERSION = sprintf "%d.%02d", q$Revision$ =~ m/ (\d+) \. (\d+) /xg;
+our $VERSION = 1.18;
 
 =item run( @macs )
 
