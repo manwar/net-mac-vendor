@@ -1,5 +1,8 @@
 # $Id$
 
+1.18 - Sat Oct 27 20:37:52 2007
+	* distro cleanups after moving from CVS to SVN
+
 1.17 - Tue Jan  9 22:35:52 2007
 	* updated copyright and license info
 	* no code changes, so no need to upgrade
