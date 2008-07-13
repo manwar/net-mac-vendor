@@ -1,6 +1,6 @@
 # $Id$
 
-use Test::More tests => 7;
+use Test::More tests => 12;
 
 use_ok( 'Net::MAC::Vendor' );
 
@@ -18,3 +18,16 @@ foreach my $elem ( @Good )
 	my $normalized = Net::MAC::Vendor::normalize_mac( $elem->[0] );
 	is( $normalized, $elem->[1], "MAC $$elem[0] is $$elem[1]" ); 
 	}	
+	
+{
+no warnings 'uninitialized';
+
+local *STDERR;
+open STDERR, ">", \my $warnings;
+
+foreach my $elem ( undef, '', 0, -1, "Foo" )
+	{
+	my $rc = Net::MAC::Vendor::normalize_mac( $elem );
+	is( $rc, undef, "Bad MAC [$elem] returns undef" ); 
+	}
+}

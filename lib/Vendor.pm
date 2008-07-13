@@ -67,7 +67,7 @@ our $Cached = do {
 		{};
 		};
 
-our $VERSION = 1.18;
+our $VERSION = 1.19;
 
 =item run( @macs )
 
@@ -88,16 +88,13 @@ sub run
 	{
 	my $class = shift;
 
-	load_cache();
-
 	foreach my $arg ( @_ )
 		{
-		my $mac   = normalize_mac( $arg );
-		my $lines = fetch_oui( $mac );
+		my $lines = lookup( $arg );
 
 		unshift @$lines, $arg;
 
-		print join "\n", @$lines, undef;
+		print join "\n", @$lines, '';
 		}
 	}
 
@@ -149,15 +146,27 @@ only need the first three bytes
 
 sub normalize_mac
 	{
+	no warnings 'uninitialized';
+	
 	my $input = uc shift;
 
-	my $mac   = join "-",
+	do {
+		carp "Could not normalize MAC [$input]";
+		return
+		} if $input =~ m/[^0-9a-f:-]/i;
+	
+	my @bytes =
 		grep { /^[0-9A-F]{2}$/ }
 		map { sprintf "%02X", hex }
+		grep { defined }
 		( split /[:-]/, $input )[0..2];
 
-	$mac = undef unless $mac =~ /^[0-9A-F]{2}-[0-9A-F]{2}-[0-9A-F]{2}$/;
-	carp "Could not normalize MAC [$input]" unless $mac;
+	do {
+		carp "Could not normalize MAC [$input]";
+		return
+		} unless @bytes == 3;
+	
+	my $mac = join "-", @bytes;
 
 	return $mac;
 	}
@@ -173,7 +182,7 @@ MAC.
 
 To avoid multiple calls on the network, use C<load_cache> to preload
 the entire OUI space into an in-memory cache. This can take a long
-time over a slow network, thoug; the file is about 60,000 lines.
+time over a slow network, though; the file is about 60,000 lines.
 
 =cut
 
@@ -198,7 +207,8 @@ sub fetch_oui_from_ieee
 
 	parse_oui(
 		extract_oui_from_html(
-			get( "http://standards.ieee.org/cgi-bin/ouisearch?$mac" )
+			get( "http://standards.ieee.org/cgi-bin/ouisearch?$mac" ),
+			$mac
 			)
 		);
 	}
@@ -225,7 +235,7 @@ sub fetch_oui_from_cache
 	exists $Cached->{ $mac } ? $Cached->{ $mac } : ();
 	}
 
-=item extract_oui_from_html( HTML )
+=item extract_oui_from_html( HTML, OUI )
 
 Gets rid of the HTML around the OUI information.  It may still be
 ugly. The HTML is the search results page of the IEEE ouisearch
@@ -239,7 +249,10 @@ mean unexpected input or a change in format.
 sub extract_oui_from_html
 	{
 	my $html = shift;
+	my $mac = normalize_mac( shift );
 
+	$html =~ s/<pre>.*?$mac/<pre>$mac/is;
+	
 	my( $oui ) = $html =~ m|<pre>(.*?)</pre>|gs;
 	return unless defined $oui;
 
@@ -271,10 +284,10 @@ sub parse_oui
 	my $oui = shift;
 	return [] unless $oui;
 
-	my @lines = map { $_ =~ s/^\s+|\s+$//; $_ ? $_ : () } split /$/m, $oui;
+	my @lines = map { s/^\s+//; $_ ? $_ : () } split /$/m, $oui;
 	splice @lines, 1, 1, ();
 
-	$lines[0] = ( split /\s+/, $lines[0], 3 )[-1];
+	$lines[0] =~ s/\S+\s+\S+\s+//;
 	return \@lines;
 	}
 
@@ -311,13 +324,18 @@ sub load_cache
 	my @entries = split /\n\n/, $data;
 	shift @entries;
 
-	my $foo = '';
+	my $count = '';
 	foreach my $entry ( @entries )
 		{
-		$entry =~ s/^\s+|\s+$//;
+		#++$count;
+	#	print STDERR "Processing ", ++$count, " entries\n";
+		$entry =~ s/^\s+//;
 		my $oui = substr $entry, 0, 8;
 		$Cached->{ $oui } = parse_oui( $entry );
+		#last if $count > 100;
 		}
+		
+	return 1;
 	}
 
 =back

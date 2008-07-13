@@ -1,6 +1,7 @@
 Changes
 examples/README
 extras/oui-20060623.txt
+extras/oui-20080629.txt
 lib/Vendor.pm
 LICENSE
 Makefile.PL
@@ -9,8 +10,10 @@ README
 t/compile.t
 t/extract_oui_from_html.t
 t/fetch_oui.t
+t/fetch_oui_from_ieee.t
 t/normalize_mac.t
 t/parse_oui.t
 t/pod.t
 t/pod_coverage.t
+t/run.t
 t/test_manifest

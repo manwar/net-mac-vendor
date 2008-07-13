@@ -12,3 +12,5 @@ Makefile.old
 .lwpcookies
 \.bak
 mac_oui.db
+\.svn
+cover_
