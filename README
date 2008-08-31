@@ -8,7 +8,7 @@ Install this module using the normal Perl module installation steps.
     make install
     
 If you want to read the module documentation before you install the
-module, try
+module, try:
 
 	perldoc lib/Vendor.pm
 	
