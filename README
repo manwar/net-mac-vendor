@@ -24,4 +24,8 @@ you should probably get the latest version when you can.
 
 	http://standards.ieee.org/regauth/oui/oui.txt
 
+The source is in Github:
+
+	git://github.com/briandfoy/net--mac--vendor.git
+	
 Feel free to send me feedback---brian d foy <bdfoy@cpan.org>
