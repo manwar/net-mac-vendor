@@ -13,4 +13,5 @@ Makefile.old
 \.bak
 mac_oui.db
 \.svn
-cover_
+cover_db
+\.git
