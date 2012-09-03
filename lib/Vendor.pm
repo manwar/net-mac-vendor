@@ -61,9 +61,21 @@ use LWP::Simple qw(get);
 
 # http://standards.ieee.org/regauth/oui/oui.txt
 
+=item cache_file_name
+
+Returns the name of the cache file, which is either the value
+of the NET_MAC_VENDOR_CACHE environment variable or the default
+value.
+
+=cut
+
+sub cache_file_name {
+	defined $ENV{NET_MAC_VENDOR_CACHE} ?
+		$ENV{NET_MAC_VENDOR_CACHE} : 'mac_oui.db';
+	}
 our $Cached = do {
 	eval "require DBM::Deep" ?
-		DBM::Deep->new( $ENV{NET_MAC_VENDOR_CACHE} || 'mac_oui.db' ) :
+		DBM::Deep->new( cache_file_name() ) :
 		{};
 		};
 

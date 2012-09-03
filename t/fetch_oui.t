@@ -98,8 +98,8 @@ foreach my $oui ( @oui )
 		}
 	}
 
-unlink( 'mac_oui.db' );
-ok( ! -e 'mac_oui.db', "Cache file has been unlinked" );
+unlink( Net::MAC::Vendor::cache_file_name() );
+ok( ! -e Net::MAC::Vendor::cache_file_name(), "Cache file has been unlinked" );
 }
 
 done_testing();
