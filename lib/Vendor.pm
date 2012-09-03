@@ -339,14 +339,13 @@ sub load_cache
 	my $count = '';
 	foreach my $entry ( @entries )
 		{
-		#++$count;
 	#	print STDERR "Processing ", ++$count, " entries\n";
 		$entry =~ s/^\s+//;
 		my $oui = substr $entry, 0, 8;
 		$Cached->{ $oui } = parse_oui( $entry );
 		#last if $count > 100;
 		}
-		
+
 	return 1;
 	}
 
