@@ -1,5 +1,3 @@
-# $Id$
-
 use Test::More tests => 11;
 
 use LWP::Simple qw(head);

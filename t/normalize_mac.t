@@ -1,5 +1,3 @@
-# $Id$
-
 use Test::More tests => 12;
 
 use_ok( 'Net::MAC::Vendor' );
