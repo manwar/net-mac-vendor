@@ -1,6 +1,4 @@
-#!/usr/bin/perl
-
-use Test::More 'no_plan';
+use Test::More;
 
 my $class = 'Net::MAC::Vendor';
 
@@ -17,6 +15,8 @@ is( $rc, undef, "load_cache returns undef for bad source [not_there.txt]");
 {
 local *STDERR;
 open STDERR, ">", \my $output;
-my $rc = Net::MAC::Vendor::load_cache( );
+my $rc = Net::MAC::Vendor::load_cache();
 ok( $rc, "load_cache returns true for default source");
 }
+
+done_testing();

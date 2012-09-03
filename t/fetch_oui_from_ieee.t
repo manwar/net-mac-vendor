@@ -1,6 +1,4 @@
-#!/usr/bin/perl
-
-use Test::More 'no_plan';
+use Test::More 0.98;
 
 my $class = 'Net::MAC::Vendor';
 
@@ -15,3 +13,5 @@ my $html = join "\n", @$array;
 like( $html, qr/3COM CORPORATION/, "Fetched 3M's OUI entry" );
 
 unlike( $html, qr/PRIVATE/, "Still see PRIVATE in 3M entry" );
+
+done_testing();

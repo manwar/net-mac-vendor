@@ -1,4 +1,4 @@
-use Test::More tests => 4;
+use Test::More 0.98;
 
 use_ok( 'Net::MAC::Vendor' );
 
@@ -109,3 +109,5 @@ open STDERR, ">", \my $output;
 my $oui = Net::MAC::Vendor::extract_oui_from_html( '' );
 is( $oui, undef, "Get back undef for bad HTML" );
 }
+
+done_testing();
