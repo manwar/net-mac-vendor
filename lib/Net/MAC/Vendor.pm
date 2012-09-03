@@ -96,12 +96,10 @@ network at all.
 
 =cut
 
-sub run
-	{
+sub run {
 	my $class = shift;
 
-	foreach my $arg ( @_ )
-		{
+	foreach my $arg ( @_ ) {
 		my $lines = lookup( $arg );
 
 		unshift @$lines, $arg;
@@ -123,8 +121,7 @@ for MAC.
 
 =cut
 
-sub lookup
-	{
+sub lookup {
 	my $mac   = shift;
 
 	   $mac   = normalize_mac( $mac );
@@ -156,8 +153,7 @@ only need the first three bytes
 
 =cut
 
-sub normalize_mac
-	{
+sub normalize_mac {
 	no warnings 'uninitialized';
 
 	my $input = uc shift;
@@ -198,8 +194,7 @@ time over a slow network, though; the file is about 60,000 lines.
 
 =cut
 
-sub fetch_oui
-	{
+sub fetch_oui {
 	fetch_oui_from_cache( $_[0] ) || fetch_oui_from_ieee( $_[0] );
 	}
 
@@ -213,8 +208,7 @@ MAC.
 
 =cut
 
-sub fetch_oui_from_ieee
-	{
+sub fetch_oui_from_ieee {
 	my $mac = normalize_mac( shift );
 
 	parse_oui(
@@ -240,8 +234,7 @@ If it doesn't find the MAC in the cache, it returns nothing.
 
 =cut
 
-sub fetch_oui_from_cache
-	{
+sub fetch_oui_from_cache {
 	my $mac = normalize_mac( shift );
 
 	exists $Cached->{ $mac } ? $Cached->{ $mac } : ();
@@ -258,8 +251,7 @@ mean unexpected input or a change in format.
 
 =cut
 
-sub extract_oui_from_html
-	{
+sub extract_oui_from_html {
 	my $html = shift;
 	my $lookup_mac = normalize_mac( shift );
 
@@ -278,8 +270,7 @@ sub extract_oui_from_html
 
 	my $result = $entries[0];
 
-	foreach my $entry ( @entries )
-		{
+	foreach my $entry ( @entries ) {
 		$entry =~ s/^\s+|\s+$//;
 		my $found_mac = normalize_mac( substr $entry, 0, 8 );
 		if( $found_mac eq $lookup_mac ) {
@@ -309,8 +300,7 @@ With no arguments, it returns an empty anonymous array.
 
 =cut
 
-sub parse_oui
-	{
+sub parse_oui {
 	my $oui = shift;
 	return [] unless $oui;
 
@@ -339,8 +329,7 @@ nothing.
 
 =cut
 
-sub load_cache
-	{
+sub load_cache {
 	my $source = shift || "http://standards.ieee.org/regauth/oui/oui.txt";
 
 	my $data = do {
@@ -368,8 +357,7 @@ sub load_cache
 	shift @entries;
 
 	my $count = '';
-	foreach my $entry ( @entries )
-		{
+	foreach my $entry ( @entries ) {
 	#	print STDERR "Processing ", ++$count, " entries\n";
 		$entry =~ s/^\s+//;
 		my $oui = substr $entry, 0, 8;
