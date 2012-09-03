@@ -111,12 +111,11 @@ sub run {
 =item lookup( MAC )
 
 Given the MAC address, return an anonymous array with the vendor
-information. The first element is the OUI, the second element
-is the vendor name, and the remaining elements are the address
-lines. Different records may have different numbers of lines,
-although the first two should be consistent.
+information. The first element is the vendor name, and the remaining
+elements are the address lines. Different records may have different
+numbers of lines, although the first two should be consistent.
 
-The C<normalize_mac()> function explains the possible formants
+The C<normalize_mac()> function explains the possible formats
 for MAC.
 
 =cut
