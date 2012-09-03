@@ -360,7 +360,7 @@ L<Net::MacMap>
 
 The source is in Github:
 
-	git://github.com/briandfoy/net--mac--vendor.git
+	git://github.com/briandfoy/net-mac-vendor.git
 
 =head1 AUTHOR
 
