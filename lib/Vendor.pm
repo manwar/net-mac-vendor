@@ -261,16 +261,34 @@ mean unexpected input or a change in format.
 sub extract_oui_from_html
 	{
 	my $html = shift;
-	my $mac = normalize_mac( shift );
+	my $lookup_mac = normalize_mac( shift );
 
-	$html =~ s/<pre>.*?$mac/<pre>$mac/is;
-	
-	my( $oui ) = $html =~ m|<pre>(.*?)</pre>|gs;
-	return unless defined $oui;
+	$html =~ s/<pre>.*?$lookup_mac/<pre>$lookup_mac/is;
 
-	$oui =~ s|</?b>||g;
+	# sometimes the HTML returns more than one OUI because
+	# IEEE has a problem parsing their own data when they
+	# have private blocks
+	my( $ouis ) = $html =~ m|<pre>(.*?)</pre>|gs;
+	return unless defined $ouis;
+	$ouis =~ s/<\/?b>//gs; # remove bold around the OUI
 
-	return $oui;
+	my @entries = split /\n\s*\n/, $ouis;
+	return unless defined $entries[0];
+	return $entries[0] unless defined $entries[1];
+
+	my $result = $entries[0];
+
+	foreach my $entry ( @entries )
+		{
+		$entry =~ s/^\s+|\s+$//;
+		my $found_mac = normalize_mac( substr $entry, 0, 8 );
+		if( $found_mac eq $lookup_mac ) {
+			$result = $entry;
+			last;
+			}
+		}
+
+	return $result;
 	}
 
 =item parse_oui( STRING )
@@ -325,15 +343,28 @@ sub load_cache
 	{
 	my $source = shift || "http://standards.ieee.org/regauth/oui/oui.txt";
 
-	my $data;
+	my $data = do {
+		if( -e $source ) { # local files
+			do { local( @ARGV, $/ ) = $source; <> }
+			}
+		else { # everything else
+			my $data = get( $source );
 
-	unless( $data = get( $source ) )
-		{
-		carp "Could not read from '$source'";
-		return;
-		}
+			unless( defined $data ) {
+				carp "Could not read from '$source'";
+				return;
+				}
 
-	my @entries = split /\n\n/, $data;
+			$data;
+			}
+		};
+
+	# The PRIVATE entries fill in a template with no
+	# company name or address, but the whitespace is
+	# still there. We need to split on a newline
+	# followed by some potentially horizontal whitespace
+	# and another newline
+	my @entries = split /[\t ]*\n[\t ]*\n/, $data;
 	shift @entries;
 
 	my $count = '';
