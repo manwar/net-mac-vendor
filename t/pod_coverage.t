@@ -1,4 +1,4 @@
-use Test::More;
+use Test::More 0.98;
 eval "use Test::Pod::Coverage";
 
 if( $@ )

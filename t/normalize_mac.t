@@ -1,4 +1,4 @@
-use Test::More tests => 12;
+use Test::More 0.98;
 
 use_ok( 'Net::MAC::Vendor' );
 
@@ -29,3 +29,5 @@ foreach my $elem ( undef, '', 0, -1, "Foo" )
 	is( $rc, undef, "Bad MAC [$elem] returns undef" ); 
 	}
 }
+
+done_testing();

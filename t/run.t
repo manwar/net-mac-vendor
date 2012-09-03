@@ -1,6 +1,4 @@
-#!/usr/bin/perl
-
-use Test::More 'no_plan';
+use Test::More 0.98;
 
 my $class = 'Net::MAC::Vendor';
 
@@ -17,3 +15,5 @@ my $rc = $class->run( '00:0d:93:84:49:ee' );
 
 like( $output, qr/Apple/, 'OUI belongs to Apple');
 }
+
+done_testing();

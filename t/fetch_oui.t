@@ -1,4 +1,4 @@
-use Test::More tests => 11;
+use Test::More 0.98;
 
 use LWP::Simple qw(head);
 
@@ -101,3 +101,5 @@ foreach my $oui ( @oui )
 unlink( 'mac_oui.db' );
 ok( ! -e 'mac_oui.db', "Cache file has been unlinked" );
 }
+
+done_testing();
