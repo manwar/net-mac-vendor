@@ -19,17 +19,12 @@ subtest html => sub {
 
 subtest local_cache => sub {
 	my $file       = catfile( qw(extras oui-small.txt) );
-	my $cache_file = Net::MAC::Vendor::cache_file_name();
 
 	ok( Net::MAC::Vendor::load_cache( $file ), 'Cache is loaded' );
-	ok( -e $cache_file, "Cache file $cache_file exists" );
 	
 	my $array = Net::MAC::Vendor::lookup( $private_mac );
 	isa_ok( $array, ref [], "Got back array reference" );
 	is( $array->[0], 'PRIVATE', 'This is a private entry' );
-
-	unlink( $cache_file );
-	ok( ! -e $cache_file, "Cache file $cache_file has been unlinked" );
 	};
 
 done_testing();

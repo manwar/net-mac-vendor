@@ -61,23 +61,7 @@ use LWP::Simple qw(get);
 
 # http://standards.ieee.org/regauth/oui/oui.txt
 
-=item cache_file_name
-
-Returns the name of the cache file, which is either the value
-of the NET_MAC_VENDOR_CACHE environment variable or the default
-value.
-
-=cut
-
-sub cache_file_name {
-	defined $ENV{NET_MAC_VENDOR_CACHE} ?
-		$ENV{NET_MAC_VENDOR_CACHE} : 'mac_oui.db';
-	}
-our $Cached = do {
-	eval "require DBM::Deep" ?
-		DBM::Deep->new( cache_file_name() ) :
-		{};
-		};
+our $Cached = {};
 
 our $VERSION = 1.19_01;
 
@@ -210,11 +194,14 @@ MAC.
 sub fetch_oui_from_ieee {
 	my $mac = normalize_mac( shift );
 
+	my $html = get( "http://standards.ieee.org/cgi-bin/ouisearch?$mac" );
+	unless( defined $html ) {
+		carp "Could not fetch data from the IEEE!";
+		return;
+		}
+
 	parse_oui(
-		extract_oui_from_html(
-			get( "http://standards.ieee.org/cgi-bin/ouisearch?$mac" ),
-			$mac
-			)
+		extract_oui_from_html( $html, $mac )
 		);
 	}
 
@@ -314,10 +301,7 @@ sub parse_oui {
 
 Downloads the current list of all OUIs, parses it with C<parse_oui()>,
 and stores it in C<$Cached> anonymous hash keyed by the OUIs (i.e.
-00-0D-93). The C<fetch_oui()> will use this cache if it exists. The
-cache is stored as a C<DBM::Deep> file named after the
-C<NET_MAC_VENDOR_CACHE> environment variable, or C<mac_oui.db> by
-default.
+00-0D-93). The C<fetch_oui()> will use this cache if it exists.
 
 By default, this uses C<http://standards.ieee.org/regauth/oui/oui.txt>, 
 but given an argument, it tries to use that. To load from a local
@@ -325,6 +309,10 @@ file, use the C<file://> scheme.
 
 If C<load_cache> cannot load the data, it issues a warning and returns
 nothing.
+
+This previously used DBM::Deep if it was installed, but that was much
+too slow. Instead, if you want persistence, you can play with 
+C<$Net::MAC::Vendor::Cached> yourself.
 
 =cut
 

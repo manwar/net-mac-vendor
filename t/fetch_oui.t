@@ -64,21 +64,8 @@ my $uri  = "file://" . $path;
 
 
 print STDERR "...Loading cache...\n";
-print STDERR "...This could take awhile...\n";
-my $start = time;
 Net::MAC::Vendor::load_cache( $uri );
-my $end = time;
 print STDERR "...Cache loaded...\n";
-
-TODO: {
-	local $TODO = "Improve performance!";
-	cmp_ok( $end - $start, "<", 60 );
-	}
-	
-SKIP: {
-	skip "No DBM::Deep", 1 unless eval "require DBM::Deep";
-	ok( -e 'mac_oui.db', "Cache file exists" );
-	}
 	
 my $lines =
 	[
@@ -88,18 +75,14 @@ my $lines =
 	'UNITED STATES',
 	];
 
-foreach my $oui ( @oui )
-	{
+foreach my $oui ( @oui ) {
 	my $parsed = Net::MAC::Vendor::fetch_oui_from_cache( $oui );
 
-	foreach my $i ( 1 .. $#$parsed )
-		{
+	foreach my $i ( 1 .. $#$parsed ) {
 		is( $parsed->[$i], $lines->[$i], "Line $i matches for $oui" );
 		}
 	}
 
-unlink( Net::MAC::Vendor::cache_file_name() );
-ok( ! -e Net::MAC::Vendor::cache_file_name(), "Cache file has been unlinked" );
 }
 
 done_testing();
