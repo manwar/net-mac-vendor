@@ -159,14 +159,14 @@ only need the first three bytes
 sub normalize_mac
 	{
 	no warnings 'uninitialized';
-	
+
 	my $input = uc shift;
 
 	do {
 		carp "Could not normalize MAC [$input]";
 		return
 		} if $input =~ m/[^0-9a-f:-]/i;
-	
+
 	my @bytes =
 		grep { /^[0-9A-F]{2}$/ }
 		map { sprintf "%02X", hex }
@@ -177,7 +177,7 @@ sub normalize_mac
 		carp "Could not normalize MAC [$input]";
 		return
 		} unless @bytes == 3;
-	
+
 	my $mac = join "-", @bytes;
 
 	return $mac;
