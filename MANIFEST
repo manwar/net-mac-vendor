@@ -5,7 +5,6 @@ extras/oui-20080629.txt
 extras/oui-20120903.txt
 extras/oui-small.txt
 lib/Net/MAC/Vendor.pm
-lib/Vendor.pm
 LICENSE
 Makefile.PL
 MANIFEST
