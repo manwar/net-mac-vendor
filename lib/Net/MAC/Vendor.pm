@@ -1,9 +1,7 @@
-#!/usr/bin/perl
-
 package Net::MAC::Vendor;
-=encoding utf8
-
 use strict;
+
+=encoding utf8
 
 =head1 NAME
 
