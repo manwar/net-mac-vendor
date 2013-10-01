@@ -3,6 +3,7 @@ examples/README
 extras/oui-20060623.txt
 extras/oui-20080629.txt
 extras/oui-20120903.txt
+extras/oui-20131001.txt
 extras/oui-small.txt
 lib/Net/MAC/Vendor.pm
 LICENSE
