@@ -270,7 +270,7 @@ sub extract_oui_from_html {
 
 =item parse_oui( STRING )
 
-Takes a string that looks like
+Takes a string that looks like this:
 
 	00-03-93   (hex)            Apple Computer, Inc.
 	000393     (base 16)        Apple Computer, Inc.
