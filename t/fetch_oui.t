@@ -27,7 +27,7 @@ Net::MAC::Vendor::fetch_oui( $oui[0] );
 
 my $lines =
 	[
-	'Apple Computer',
+	'Apple',
 	'1 Infinite Loop',
 	'Cupertino CA 95014',
 	'UNITED STATES',
@@ -56,7 +56,7 @@ require Cwd;
 require File::Spec;
 
 my $cwd  = Cwd::cwd();
-my $path = File::Spec->catfile( $cwd, "extras/oui-20080629.txt" );
+my $path = File::Spec->catfile( $cwd, "extras/oui-20131001.txt" );
 
 skip "Can't get path to data file [$path]", 4 unless -e $path;
 
@@ -69,7 +69,7 @@ print STDERR "...Cache loaded...\n";
 	
 my $lines =
 	[
-	'Apple Computer',
+	'Apple',
 	'1 Infinite Loop',
 	'Cupertino CA 95014',
 	'UNITED STATES',
