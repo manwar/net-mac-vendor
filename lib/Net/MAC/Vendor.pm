@@ -63,7 +63,7 @@ use LWP::Simple qw(get);
 
 our $Cached = {};
 
-our $VERSION = '1.19_02';
+our $VERSION = '1.19_03';
 
 =item run( @macs )
 
@@ -373,7 +373,7 @@ brian d foy C<< <bdfoy@cpan.org> >>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2004-2012 brian d foy.  All rights reserved.
+Copyright (c) 2004-2013 brian d foy.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
