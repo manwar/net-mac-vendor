@@ -63,7 +63,7 @@ use LWP::Simple qw(get);
 
 our $Cached = {};
 
-our $VERSION = '1.19_03';
+our $VERSION = '1.20';
 
 =item run( @macs )
 
