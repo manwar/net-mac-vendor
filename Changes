@@ -1,5 +1,8 @@
 # $Id$
 
+1.20 - Thu Oct  3 16:03:11 2013
+	* Bump to release version
+
 1.19_03 - Tue Oct  1 11:29:54 2013
 	* Fix a test for a change in the OUI data: RT #89110
 
