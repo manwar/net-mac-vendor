@@ -9,8 +9,7 @@ lib/Net/MAC/Vendor.pm
 LICENSE
 Makefile.PL
 MANIFEST
-MYMETA.json
-MYMETA.yml
+MANIFEST.SKIP
 README
 t/compile.t
 t/extract_oui_from_html.t
