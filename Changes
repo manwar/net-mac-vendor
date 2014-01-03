@@ -1,5 +1,8 @@
 # $Id$
 
+1.21 - Fri Jan  3 13:34:19 2014
+	* Get rid of MYMETA
+
 1.20 - Thu Oct  3 16:03:11 2013
 	* Bump to release version
 
