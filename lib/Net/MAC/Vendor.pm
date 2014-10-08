@@ -85,11 +85,14 @@ sub run {
 
 	foreach my $arg ( @_ ) {
 		my $lines = lookup( $arg );
+		return unless defined $lines;
 
 		unshift @$lines, $arg;
 
 		print join "\n", @$lines, '';
 		}
+
+	return 1;
 	}
 
 =item lookup( MAC )
