@@ -1,5 +1,8 @@
 # $Id$
 
+1.22 - Wed Oct  8 04:11:27 2014
+	* Better guards for tests that need to fetch from the IEEE
+
 1.21 - Fri Jan  3 13:34:19 2014
 	* Get rid of MYMETA
 
