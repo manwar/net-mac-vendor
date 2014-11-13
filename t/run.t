@@ -13,7 +13,10 @@ open STDOUT, ">", \ my $output;
 
 my $rc = $class->run( '00:0d:93:84:49:ee' );
 
-like( $output, qr/Apple/, 'OUI belongs to Apple');
+SKIP: {
+	skip 'Problem looking up data', 1 unless defined $rc;
+	like( $output, qr/Apple/, 'OUI belongs to Apple');
+	}
 }
 
 done_testing();

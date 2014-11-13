@@ -59,11 +59,11 @@ __PACKAGE__->run( @ARGV ) unless caller;
 use Carp;
 use LWP::Simple qw(get);
 
-# http://standards.ieee.org/regauth/oui/oui.txt
+# https://standards.ieee.org/regauth/oui/oui.txt
 
 our $Cached = {};
 
-our $VERSION = '1.21';
+our $VERSION = '1.22';
 
 =item run( @macs )
 
@@ -85,11 +85,14 @@ sub run {
 
 	foreach my $arg ( @_ ) {
 		my $lines = lookup( $arg );
+		return unless defined $lines;
 
 		unshift @$lines, $arg;
 
 		print join "\n", @$lines, '';
 		}
+
+	return 1;
 	}
 
 =item lookup( MAC )
@@ -194,7 +197,7 @@ MAC.
 sub fetch_oui_from_ieee {
 	my $mac = normalize_mac( shift );
 
-	my $html = get( "http://standards.ieee.org/cgi-bin/ouisearch?$mac" );
+	my $html = get( "https://standards.ieee.org/cgi-bin/ouisearch?$mac" );
 	unless( defined $html ) {
 		carp "Could not fetch data from the IEEE!";
 		return;
@@ -303,7 +306,7 @@ Downloads the current list of all OUIs, parses it with C<parse_oui()>,
 and stores it in C<$Cached> anonymous hash keyed by the OUIs (i.e.
 00-0D-93). The C<fetch_oui()> will use this cache if it exists.
 
-By default, this uses C<http://standards.ieee.org/regauth/oui/oui.txt>, 
+By default, this uses C<https://standards.ieee.org/regauth/oui/oui.txt>, 
 but given an argument, it tries to use that. To load from a local
 file, use the C<file://> scheme.
 
@@ -317,7 +320,7 @@ C<$Net::MAC::Vendor::Cached> yourself.
 =cut
 
 sub load_cache {
-	my $source = shift || "http://standards.ieee.org/regauth/oui/oui.txt";
+	my $source = shift || "https://standards.ieee.org/regauth/oui/oui.txt";
 
 	my $data = do {
 		if( -e $source ) { # local files

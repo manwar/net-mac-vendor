@@ -13,7 +13,7 @@ ok( ! -e 'mac_oui.db', "Cache file has been unlinked" );
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-my $connected = head( 'http://standards.ieee.org/regauth/oui/oui.txt' );
+my $connected = head( 'https://standards.ieee.org/regauth/oui/oui.txt' );
 
 ok( defined $connected, "Am connected to network" );
 
