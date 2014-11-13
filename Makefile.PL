@@ -12,8 +12,9 @@ WriteMakefile(
 	'AUTHOR'       => 'brian d foy <bdfoy@cpan.org>',
 	
 	'PREREQ_PM'    => { 
-		'Test::More'        => '0.98',
-		'LWP::Simple'       => '0',
+		'Test::More'        	=> '0.98',
+		'LWP::Simple'       	=> '0',
+		'LWP::protocol::https'	=> '0',
 		},
 
 	'META_MERGE' => {
