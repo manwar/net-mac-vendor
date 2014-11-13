@@ -63,7 +63,7 @@ use LWP::Simple qw(get);
 
 our $Cached = {};
 
-our $VERSION = '1.22';
+our $VERSION = '1.23';
 
 =item run( @macs )
 
@@ -300,7 +300,7 @@ sub parse_oui {
 	return \@lines;
 	}
 
-=item load_cache( [ SOURCE ] )
+=item load_cache( [ SOURCE[, DEST ] ] )
 
 Downloads the current list of all OUIs, parses it with C<parse_oui()>,
 and stores it in C<$Cached> anonymous hash keyed by the OUIs (i.e.
@@ -317,10 +317,15 @@ This previously used DBM::Deep if it was installed, but that was much
 too slow. Instead, if you want persistence, you can play with 
 C<$Net::MAC::Vendor::Cached> yourself.
 
+If you want to store the data fetched for later use, add a destination
+filename to the request. To fetch from the default location and store,
+specify C<undef> as source.
+
 =cut
 
 sub load_cache {
 	my $source = shift || "https://standards.ieee.org/regauth/oui/oui.txt";
+	my $dest   = shift;
 
 	my $data = do {
 		if( -e $source ) { # local files
@@ -332,6 +337,16 @@ sub load_cache {
 			unless( defined $data ) {
 				carp "Could not read from '$source'";
 				return;
+				}
+
+			if ( $dest ) { # store cache
+				if ( open my $fh, '>', $dest ) {
+					print $fh $data;
+					close $fh;
+					} 
+				else { # notify on error, but continue
+					carp "Could not write to '$dest'";
+					}
 				}
 
 			$data;

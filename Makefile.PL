@@ -5,20 +5,22 @@ require 5.006;
 eval "use Test::Manifest 1.21";
 
 WriteMakefile(
-	'NAME'	       => 'Net::MAC::Vendor',
+	'NAME'         => 'Net::MAC::Vendor',
 	'ABSTRACT'     => 'Look up the network interface vendor by its MAC',
 	'VERSION_FROM' => 'lib/Net/MAC/Vendor.pm',
 	'LICENSE'      => 'perl',
 	'AUTHOR'       => 'brian d foy <bdfoy@cpan.org>',
 	
 	'PREREQ_PM'    => { 
-		'Test::More'        	=> '0.98',
-		'LWP::Simple'       	=> '0',
-		'LWP::protocol::https'	=> '0',
+		'File::Temp'            => '0',
+		'LWP::protocol::https'  => '0',
+		'LWP::Simple'           => '0',
+		'LWP::Simple'           => '0',
+		'Test::More'            => '0.98',
 		},
 
 	'META_MERGE' => {
-        'meta-spec' => { version => 2 },
+		'meta-spec' => { version => 2 },
 		resources => {
 			repository => {
 				type => 'git',
