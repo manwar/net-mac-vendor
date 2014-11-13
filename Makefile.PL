@@ -13,6 +13,7 @@ WriteMakefile(
 	
 	'PREREQ_PM'    => { 
 		'Test::More'        => '0.98',
+		'File::Temp'        => '0',
 		'LWP::Simple'       => '0',
 		},
 
