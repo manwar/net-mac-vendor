@@ -13,7 +13,7 @@ WriteMakefile(
 	
 	'PREREQ_PM'    => { 
 		'File::Temp'            => '0',
-		'LWP::protocol::https'  => '0',
+		'LWP::Protocol::https'  => '0',
 		'LWP::Simple'           => '0',
 		'LWP::Simple'           => '0',
 		'Test::More'            => '0.98',
