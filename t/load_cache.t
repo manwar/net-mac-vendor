@@ -1,4 +1,5 @@
 use Test::More;
+use File::Temp qw/ tempfile /;
 
 my $class = 'Net::MAC::Vendor';
 
@@ -17,6 +18,23 @@ local *STDERR;
 open STDERR, ">", \my $output;
 my $rc = Net::MAC::Vendor::load_cache();
 ok( $rc, "load_cache returns true for default source");
+}
+
+my ($fh, $filename) = tempfile( undef, UNLINK => 1 );
+{
+local *STDERR;
+open STDERR, ">", \my $output;
+my $rc = Net::MAC::Vendor::load_cache(undef,$filename);
+ok( $rc, "load_cache returns true for default source with write");
+}
+
+ok ( -s $filename, "load_cache results in file with size > 0");
+
+{
+local *STDERR;
+open STDERR, ">", \my $output;
+my $rc = Net::MAC::Vendor::load_cache($filename);
+ok( $rc, "load_cache returns true read from created source");
 }
 
 done_testing();
