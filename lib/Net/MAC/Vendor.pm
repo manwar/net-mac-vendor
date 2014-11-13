@@ -300,15 +300,15 @@ sub parse_oui {
 	return \@lines;
 	}
 
-=item load_cache( [ SOURCE ] )
+=item load_cache( [ SOURCE[, DEST ] ] )
 
 Downloads the current list of all OUIs, parses it with C<parse_oui()>,
 and stores it in C<$Cached> anonymous hash keyed by the OUIs (i.e.
 00-0D-93). The C<fetch_oui()> will use this cache if it exists.
 
 By default, this uses C<http://standards.ieee.org/regauth/oui/oui.txt>, 
-but given an argument, it tries to use that. To load from a local
-file, use the C<file://> scheme.
+but given an (defined) argument, it tries to use that. To load from a 
+local file, use the C<file://> scheme.
 
 If C<load_cache> cannot load the data, it issues a warning and returns
 nothing.
@@ -317,10 +317,15 @@ This previously used DBM::Deep if it was installed, but that was much
 too slow. Instead, if you want persistence, you can play with 
 C<$Net::MAC::Vendor::Cached> yourself.
 
+If you want to store the data fetched for later use, add a destination
+filename to the request. To fetch from the default location and store,
+specify C<undef> as source.
+
 =cut
 
 sub load_cache {
 	my $source = shift || "http://standards.ieee.org/regauth/oui/oui.txt";
+	my $dest   = shift;
 
 	my $data = do {
 		if( -e $source ) { # local files
@@ -333,6 +338,15 @@ sub load_cache {
 				carp "Could not read from '$source'";
 				return;
 				}
+
+			if ( $dest ) { # store cache
+				if ( open my $fh, '>', $dest ) {
+					print $fh $data;
+					close $fh;
+				} else { # notify on error, but continue
+					carp "Could not write to '$dest'";
+				}
+			}
 
 			$data;
 			}
