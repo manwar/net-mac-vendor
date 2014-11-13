@@ -1,5 +1,9 @@
 # $Id$
 
+1.23 - Thu Nov 13 12:39:54 2014
+	* IEEE now uses https (fixed by Frank071)
+	* Cache in a file instead of a db (added by Frank071)
+
 1.21 - Fri Jan  3 13:34:19 2014
 	* Get rid of MYMETA
 
