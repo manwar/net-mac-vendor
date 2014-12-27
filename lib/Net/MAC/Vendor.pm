@@ -52,18 +52,16 @@ let the user set that location.
 
 =cut
 
-use base qw(Exporter);
+use Exporter qw(import);
 
 __PACKAGE__->run( @ARGV ) unless caller;
 
 use Carp;
 use LWP::Simple qw(get);
 
-# https://standards.ieee.org/regauth/oui/oui.txt
-
 our $Cached = {};
 
-our $VERSION = '1.23';
+our $VERSION = '1.24';
 
 =item run( @macs )
 
@@ -323,8 +321,20 @@ specify C<undef> as source.
 
 =cut
 
+=item oui_url
+
+Returns the URL of the oui.txt resource. The IEEE likes to move this
+around. This is the default URL that C<load_cache> will use, but you 
+can also 
+
+=cut
+
+sub oui_url {
+	'http://www.ieee.org/netstorage/standards/oui.txt'
+	}
+
 sub load_cache {
-	my $source = shift || "https://standards.ieee.org/regauth/oui/oui.txt";
+	my $source = shift || oui_url();
 	my $dest   = shift;
 
 	my $data = do {
