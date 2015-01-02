@@ -1,4 +1,4 @@
-# $Id$
+# Changes for Net::MAC::Vendor
 
 1.23 - Thu Nov 13 12:39:54 2014
 	* IEEE now uses https (fixed by Frank071)
@@ -31,12 +31,12 @@
 	* no code changes, so no need to upgrade
 
 1.16 - Fri Nov 17 10:23:46 2006
-	* Fixed case-typo in docs s/Mac/MAC/. That's important to some 
+	* Fixed case-typo in docs s/Mac/MAC/. That's important to some
 	operating systems. :)
 	* No code updates.
 
 1.15 - Sun Jun 25 22:08:28 2006
-	* Fixed up missing dependency, error in fetch_oui.t that 
+	* Fixed up missing dependency, error in fetch_oui.t that
 	should have been a conditional test
 
 1.13 - Fri Jun 23 15:01:56 2006
@@ -49,7 +49,7 @@
 	cache first
 
 1.11 - Fri Jun 16 01:06:31 2006
-	* Load any oui.txt source that you like (another URL or local 
+	* Load any oui.txt source that you like (another URL or local
 	file://)
 
 1.01 - Thu May 25 03:58:41 2006
