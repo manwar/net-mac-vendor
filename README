@@ -1,5 +1,3 @@
-# $Id$
-
 Install this module using the normal Perl module installation steps.
 
     perl Makefile.PL
