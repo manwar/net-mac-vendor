@@ -1,4 +1,4 @@
-# Changes for Net::MAC::Vendor
+Revision history for Perl module Net::MAC::Vendor
 
 1.23 - Thu Nov 13 12:39:54 2014
 	* IEEE now uses https (fixed by Frank071)
