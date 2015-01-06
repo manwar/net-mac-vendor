@@ -72,12 +72,12 @@ Revision history for Perl module Net::MAC::Vendor
 	* No code updates, so no need to upgrade
 
 0.21 - Tue Sep  7 21:34:36 2004
-* added README to dist
-* no need to upgrade
+	* added README to dist
+	* no need to upgrade
 
 0.1 - Wed Sep  1 00:07:37 2004
-* first pass: there is still a lot of work to do and a lot of
-tests to write
+	* first pass: there is still a lot of work to do and a lot of
+	tests to write
 
 0.1 - Tue Aug 31 22:06:50 CDT 2004
 	* first pass, a bit of a monster that grew out of a simple
