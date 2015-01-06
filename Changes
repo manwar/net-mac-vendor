@@ -1,45 +1,45 @@
 Revision history for Perl module Net::MAC::Vendor
 
-1.23 - Thu Nov 13 12:39:54 2014
+1.23 - 2014-11-13
 	* IEEE now uses https (fixed by Frank071)
 	* Cache in a file instead of a db (added by Frank071)
 
-1.21 - Fri Jan  3 13:34:19 2014
+1.21 - 2014-01-03
 	* Get rid of MYMETA
 
-1.20 - Thu Oct  3 16:03:11 2013
+1.20 - 2013-10-03
 	* Bump to release version
 
-1.19_03 - Tue Oct  1 11:29:54 2013
+1.19_03 - 2013-10-01
 	* Fix a test for a change in the OUI data: RT #89110
 
-1.19_02 - Tue Nov 20 02:20:27 2012
+1.19_02 - 2012-11-20
 	* Remove bad line from MANIFEST
 	* Add encodingto Pod
 
-1.1901 - Mon Sep  3 15:39:34 2012
+1.1901 - 2012-09-03
 	* Get rid of DBM::Deep. Do your own persistence. This is a
 	big speedup.
 	* Fix some odd parsing cases with PRIVATE records
 	(RT 79369)
 
-1.18 - Sat Oct 27 20:37:52 2007
+1.18 - 2007-10-27
 	* distro cleanups after moving from CVS to SVN
 
-1.17 - Tue Jan  9 22:35:52 2007
+1.17 - 2007-01-09
 	* updated copyright and license info
 	* no code changes, so no need to upgrade
 
-1.16 - Fri Nov 17 10:23:46 2006
+1.16 - 2006-11-17
 	* Fixed case-typo in docs s/Mac/MAC/. That's important to some
 	operating systems. :)
 	* No code updates.
 
-1.15 - Sun Jun 25 22:08:28 2006
+1.15 - 2006-06-25
 	* Fixed up missing dependency, error in fetch_oui.t that
 	should have been a conditional test
 
-1.13 - Fri Jun 23 15:01:56 2006
+1.13 - 2006-06-23
 	* Improved caching that uses DBM::Deep if available
 	* Added fetch_oui_from_cache, so you can avoid the network
 	if you really don't want to use it
@@ -48,37 +48,37 @@ Revision history for Perl module Net::MAC::Vendor
 	* fetch_oui now comprises those two functions, trying the
 	cache first
 
-1.11 - Fri Jun 16 01:06:31 2006
+1.11 - 2006-06-16
 	* Load any oui.txt source that you like (another URL or local
 	file://)
 
-1.01 - Thu May 25 03:58:41 2006
+1.01 - 2006-05-25
 	* The last release forgot to bump the version number. There's no
 	need to upgrade since this only fixes a missing MANIFEST.
 
-0.24 - Thu May 25 03:31:33 2006
+0.24 - 2006-05-25
 	* MANIFEST was missing from diff. I've fixed that.
 
-0.24 - Sat May 20 02:59:48 2006
+0.24 - 2006-05-20
 	* Minor distro updates, kwalitee cleanups, and typo squashing.
 	No need to upgrade.
 
-0.23 - Thu Apr  6 11:06:46 2006
+0.23 - 2006-04-06
 	* Added Changes to MANIFEST so you can see this file.
 	* There's no need to upgrade.
 
-0.22 - Fri Mar 11 22:03:03 2005
+0.22 - 2005-03-11
 	* Added POD coverage tests and fixed problems it found
 	* No code updates, so no need to upgrade
 
-0.21 - Tue Sep  7 21:34:36 2004
+0.21 - 2004-09-07
 	* added README to dist
 	* no need to upgrade
 
-0.1 - Wed Sep  1 00:07:37 2004
+0.1 - 2004-09-01
 	* first pass: there is still a lot of work to do and a lot of
 	tests to write
 
-0.1 - Tue Aug 31 22:06:50 CDT 2004
+0.1 - 2004-08-31
 	* first pass, a bit of a monster that grew out of a simple
 	script.
