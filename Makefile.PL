@@ -1,23 +1,36 @@
-require 5.006;
+require 5.008;
 use strict;
 use warnings;
 
-my $github    = 'https://github.com/briandfoy/';
-my $main_file = 'lib/Net/MAC/Vendor.pm';
+use File::Spec::Functions qw(catfile);
+
+my $module    = 'Net::MAC::Vendor';
+my $github    = 'https://github.com/briandfoy/net-mac-vendor';
+my $main_file = catfile( 'lib', split /::/, "$module.pm" );
 
 my %WriteMakefile = (
-	'NAME'          => 'Net::MAC::Vendor',
+	'NAME'          => $module,
 	'ABSTRACT_FROM' => $main_file,
 	'VERSION_FROM'  => $main_file,
 	'LICENSE'       => 'perl',
 	'AUTHOR'        => 'brian d foy <bdfoy@cpan.org>',
-	
-	'PREREQ_PM'    => { 
+
+	'CONFIGURE_REQUIRES' => {
+		'ExtUtils::MakeMaker' => '6.64',
+		},
+
+	'BUILD_REQUIRES' => {
+		},
+
+	'TEST_REQUIRES' => {
+		'Test::More' => '0.94',
+		},
+
+	'PREREQ_PM'     => {
 		'File::Temp'            => '0',
 		'LWP::Protocol::https'  => '0',
 		'LWP::Simple'           => '0',
 		'LWP::Simple'           => '0',
-		'Test::More'            => '0.98',
 		},
 
 	'META_MERGE' => {
@@ -25,14 +38,17 @@ my %WriteMakefile = (
 		resources => {
 			repository => {
 				type => 'git',
-				url  => 'git@github.com:briandfoy/net-mac-vendor.git',
-				web  => 'https://github.com/briandfoy/net-mac-vendor',
+				url  => "$github.git",
+				web  => $github,
 				},
+			bugtraker => {
+				web    => "$github/issues",
+				},
+			homepage => $github,
 			},
 		},
-
+	
 	clean  => { FILES    => q|Net-MAC-Vendor-* Makefile.old MANIFEST.bak| },
-
 	);
 
 sub arguments { \%WriteMakefile }
