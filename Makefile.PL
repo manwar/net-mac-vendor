@@ -1,12 +1,12 @@
 require 5.008;
-
-package Net::MAC::Vendor;
 use strict;
 use warnings;
 
 use File::Spec::Functions qw(catfile);
 
-my $module    = __PACKAGE__;
+my $module    = 'Net::MAC::Vendor';
+( my $dist = $module ) =~ s/::/-/g;
+
 my $github    = 'https://github.com/briandfoy/net-mac-vendor';
 my $main_file = catfile( 'lib', split /::/, "$module.pm" );
 
@@ -33,7 +33,6 @@ my %WriteMakefile = (
 		'File::Temp'            => '0',
 		'LWP::Protocol::https'  => '0',
 		'LWP::Simple'           => '0',
-		'LWP::Simple'           => '0',
 		},
 
 	'META_MERGE' => {
@@ -51,7 +50,7 @@ my %WriteMakefile = (
 			},
 		},
 	
-	clean  => { FILES    => q|Net-MAC-Vendor-* Makefile.old MANIFEST.bak| },
+	clean  => { FILES    => qq|$dist-*| },
 	);
 
 sub arguments { \%WriteMakefile }
@@ -62,9 +61,9 @@ sub do_it {
 	my $MM ='ExtUtils::MakeMaker';
 	my $MM_version =
 		eval{ "$MM " . $WriteMakefile{'CONFIGURE_REQUIRES'}{'ExtUtils::MakeMaker'} }
-			//
+			||
 		"$MM 6.64";
-	eval "use $MM_version" || die "Could not load $MM_version: $@";
+	eval "use $MM_version; 1;" or die "Could not load $MM_version: $@";
 	eval "use Test::Manifest 1.21" 
 		if -e File::Spec->catfile( qw(t test_manifest) );
 	WriteMakefile( %WriteMakefile );
