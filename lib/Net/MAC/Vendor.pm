@@ -61,7 +61,7 @@ use LWP::Simple qw(get);
 
 our $Cached = {};
 
-our $VERSION = '1.24';
+our $VERSION = '1.24_01';
 
 =item run( @macs )
 
@@ -368,7 +368,8 @@ sub load_cache {
 	# still there. We need to split on a newline
 	# followed by some potentially horizontal whitespace
 	# and another newline
-	my @entries = split /[\t ]*\n[\t ]*\n/, $data;
+	my $CRLF = qr/(?:\r?\n)/;
+	my @entries = split /[\t ]* $CRLF [\t ]* $CRLF/x, $data;
 	shift @entries;
 
 	my $count = '';
