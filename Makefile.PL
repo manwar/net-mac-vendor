@@ -76,6 +76,5 @@ sub do_it {
 	WriteMakefile( %$arguments );
 	}
 
-
 no warnings;
 __PACKAGE__;
