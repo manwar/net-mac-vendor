@@ -7,6 +7,7 @@ extras/oui-20131001.txt
 extras/oui-20141226.txt
 extras/oui-20150109.txt
 extras/oui-small.txt
+INSTALL.SKIP
 lib/Net/MAC/Vendor.pm
 LICENSE
 Makefile.PL
