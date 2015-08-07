@@ -195,12 +195,23 @@ MAC.
 sub fetch_oui_from_ieee {
 	my $mac = normalize_mac( shift );
 
-	my $html = get( "https://standards.ieee.org/cgi-bin/ouisearch?$mac" );
+	my @urls = map { $_ . "://standards.ieee.org/cgi-bin/ouisearch?$mac" }
+		qw( https http );
+
+	unshift @urls, $ENV{NET_MAC_VENDOR_OUI_SOURCE} if 
+		defined $ENV{NET_MAC_VENDOR_OUI_SOURCE};
+
+	my $html;
+	foreach my $url ( @urls ) {
+		$html = get( $url );
+		next unless defined $html;
+		}
+		
 	unless( defined $html ) {
 		carp "Could not fetch data from the IEEE!";
 		return;
 		}
-
+		
 	parse_oui(
 		extract_oui_from_html( $html, $mac )
 		);
@@ -323,23 +334,14 @@ specify C<undef> as source.
 
 =item oui_url
 
-=item oui_urls
-
-Returns the URLs of the oui.txt resource. The IEEE likes to move this
-around. These are the default URL that C<load_cache> will use, but you 
+Returns the URL of the oui.txt resource. The IEEE likes to move this
+around. This is the default URL that C<load_cache> will use, but you 
 can also 
 
 =cut
 
-sub oui_url { (grep { /http:/ } &oui_urls)[0] }
-
-sub oui_urls {
-	my @urls = qw(
-		http://www.ieee.org/netstorage/standards/oui.txt
-		https://www.ieee.org/netstorage/standards/oui.txt		
-	  );
-	  
-	unshift @urls, $ENV{NET_MAC_VENDOR_OUI_URL};
+sub oui_url {
+	'http://www.ieee.org/netstorage/standards/oui.txt'
 	}
 
 sub load_cache {
@@ -359,7 +361,7 @@ sub load_cache {
 				}
 
 			if ( $dest ) { # store cache
-				if( open my $fh, '>', $dest ) {
+				if ( open my $fh, '>', $dest ) {
 					print $fh $data;
 					close $fh;
 					} 
