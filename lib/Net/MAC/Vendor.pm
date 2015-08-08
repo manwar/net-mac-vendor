@@ -38,13 +38,11 @@ You can use this as a module as its individual functions, or call it
 as a script with a list of MAC addresses as arguments. The module can
 figure it out.
 
-This module tries to persistently cache with DBM::Deep the OUI
-information so it can avoid using the network. If it cannot load
-DBM::Deep, it uses a normal hash (which is lost when the process
-finishes). You can preload this cache with the C<load_cache()> function.
-So far, the module looks in the current working directory for a file
-named mac_oui.db to find the cache. I need to come up with a way to
-let the user set that location.
+The IEEE moves the location of its OUI file.
+
+	http://standards.ieee.org/regauth/oui/oui.txt
+	https://standards.ieee.org/regauth/oui/oui.txt
+	http://standards-oui.ieee.org/oui.txt
 
 =head2 Functions
 
