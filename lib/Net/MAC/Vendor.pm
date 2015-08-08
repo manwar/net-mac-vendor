@@ -61,6 +61,10 @@ use LWP::Simple qw(get);
 
 our $Cached = {};
 
+my $ua = LWP::UserAgent->new();
+
+my $ua = LWP::UserAgent->new();
+
 our $VERSION = '1.24_01';
 
 =item run( @macs )
@@ -89,6 +93,14 @@ sub run {
 
 		print join "\n", @$lines, '';
 		}
+=item ua
+
+Return the LWP::UserAgent object used to fetch resources.
+
+=cut
+
+sub ua { $ua }
+
 
 	return 1;
 	}

@@ -67,7 +67,7 @@ my %WriteMakefile = (
 	'PREREQ_PM'     => {
 		'File::Temp'            => '0',
 		'LWP::Protocol::https'  => '0',
-		'LWP::Simple'           => '0',
+		'LWP::UserAgent'        => '0',
 		},
 
 	'META_MERGE' => {
