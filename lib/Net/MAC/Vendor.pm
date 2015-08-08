@@ -67,7 +67,7 @@ use LWP::Simple qw(get);
 
 our $Cached = {};
 
-our $VERSION = '1.24_01';
+our $VERSION = '1.24_02';
 
 my $ua = LWP::UserAgent->new();
 
