@@ -63,3 +63,6 @@
 \.lwpcookies
 Net-MAC-.*
 mac_oui\.db
+
+# don't distribute the old OUI files
+extras/.*\.gz
