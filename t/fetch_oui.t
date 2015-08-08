@@ -14,6 +14,7 @@ ok( ! -e 'mac_oui.db', "Cache file has been unlinked" );
  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 my $connected = head( Net::MAC::Vendor::oui_url() );
+note( "Connected to network" );
 
 ok( defined $connected, "Am connected to network" );
 
@@ -36,12 +37,10 @@ my $lines =
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-foreach my $oui ( @oui )
-	{
+foreach my $oui ( @oui ) {
 	my $parsed = Net::MAC::Vendor::fetch_oui( $oui );
 	
-	foreach my $i ( 0 .. $#$parsed )
-		{
+	foreach my $i ( 0 .. $#$parsed ) {
 		is( $parsed->[$i], $lines->[$i], "Line $i matches for $oui" );
 		}
 	}
@@ -56,7 +55,7 @@ require Cwd;
 require File::Spec;
 
 my $cwd  = Cwd::cwd();
-my $path = File::Spec->catfile( $cwd, "extras/oui-20131001.txt" );
+my $path = File::Spec->catfile( $cwd, "extras/oui-20150808.txt" );
 
 skip "Can't get path to data file [$path]", 4 unless -e $path;
 
