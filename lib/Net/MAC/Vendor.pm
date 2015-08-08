@@ -411,9 +411,7 @@ variable.
 sub oui_url { (grep { /http:/ } &oui_urls)[0] }
 
 sub oui_urls {
-	my @urls = qw(
-		http://standards-oui.ieee.org/oui.txt
-	  );
+	my @urls = "http://standards-oui.ieee.org/oui.txt";
 
 	unshift @urls, $ENV{NET_MAC_VENDOR_OUI_URL};
 
