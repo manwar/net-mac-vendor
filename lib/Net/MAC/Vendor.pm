@@ -32,17 +32,25 @@ This module allows you to take a MAC address and turn it into the OUI
 and vendor information. You can, for instance, scan a network,
 collect MAC addresses, and turn those addresses into vendors. With
 vendor information, you can often guess at what what you are looking
-at (e.g. an Apple product).
+at (I<e.g.> an Apple product).
 
 You can use this as a module as its individual functions, or call it
 as a script with a list of MAC addresses as arguments. The module can
 figure it out.
 
-The IEEE moves the location of its OUI file.
+The IEEE moves the location of its OUI file. If they do that again, you
+can set the C<NET_MAC_VENDER_OUI_URL> environment variable to get the new
+URL without updating the code.
+
+Here are some of the old URLs, which also flip-flop schemes:
 
 	http://standards.ieee.org/regauth/oui/oui.txt
 	https://standards.ieee.org/regauth/oui/oui.txt
 	http://standards-oui.ieee.org/oui.txt
+
+There are older copies of the OUI file in the GitHub repository.
+
+These files are large (about 4MB), so you might want to cache a copy.
 
 =head2 Functions
 
@@ -59,11 +67,9 @@ use LWP::Simple qw(get);
 
 our $Cached = {};
 
-my $ua = LWP::UserAgent->new();
-
-my $ua = LWP::UserAgent->new();
-
 our $VERSION = '1.24_01';
+
+my $ua = LWP::UserAgent->new();
 
 =item run( @macs )
 
@@ -91,6 +97,10 @@ sub run {
 
 		print join "\n", @$lines, '';
 		}
+
+	return 1;
+	}
+
 =item ua
 
 Return the LWP::UserAgent object used to fetch resources.
@@ -99,16 +109,15 @@ Return the LWP::UserAgent object used to fetch resources.
 
 sub ua { $ua }
 
-
-	return 1;
-	}
-
 =item lookup( MAC )
 
 Given the MAC address, return an anonymous array with the vendor
 information. The first element is the vendor name, and the remaining
 elements are the address lines. Different records may have different
 numbers of lines, although the first two should be consistent.
+
+This makes a direct request to the IEEE website for that OUI to return
+the information for that vendor.
 
 The C<normalize_mac()> function explains the possible formats
 for MAC.
@@ -189,7 +198,36 @@ time over a slow network, though; the file is about 60,000 lines.
 =cut
 
 sub fetch_oui {
-	fetch_oui_from_cache( $_[0] ) || fetch_oui_from_ieee( $_[0] );
+	# fetch_oui_from_custom( $_[0] )    ||
+		fetch_oui_from_cache( $_[0] ) ||
+		fetch_oui_from_ieee( $_[0] );
+	}
+
+=item fetch_oui_from_custom( MAC, [ URL ] )
+
+Looks up the OUI information from the specified URL or the URL set
+in the C<NET_MAC_VENDOR_OUI_SOURCE> environment variable.
+
+The C<normalize_mac()> function explains the possible formants for
+MAC.
+
+=cut
+
+sub fetch_oui_from_custom {
+	my $mac = normalize_mac( shift );
+	my $url = shift // $ENV{NET_MAC_VENDOR_OUI_SOURCE};
+
+	return unless defined $url;
+
+	my $html = get( $url );
+	unless( defined $html ) {
+		carp "Could not fetch data from the IEEE!";
+		return;
+		}
+
+	parse_oui(
+		extract_oui_from_html( $html, $mac )
+		);
 	}
 
 =item fetch_oui_from_ieee( MAC )
@@ -205,7 +243,16 @@ MAC.
 sub fetch_oui_from_ieee {
 	my $mac = normalize_mac( shift );
 
-	my $html = get( "https://standards.ieee.org/cgi-bin/ouisearch?$mac" );
+	my @urls = oui_urls();
+
+	my $html;
+	URL: foreach my $url ( @urls ) {
+		$html = _fetch_oui_from_url( $url );
+		next URL unless defined $html;
+		print STDERR "Fetched from [$url]\n";
+		last;
+		}
+
 	unless( defined $html ) {
 		carp "Could not fetch data from the IEEE!";
 		return;
@@ -214,6 +261,26 @@ sub fetch_oui_from_ieee {
 	parse_oui(
 		extract_oui_from_html( $html, $mac )
 		);
+	}
+
+sub _fetch_oui_from_url {
+	my $url = shift;
+
+	return unless defined $url;
+
+	my $response = $ua->get( $url );
+	unless( $response->is_success ) {
+		carp "Failed fetching [$url]: " . $response->code;
+		return;
+		}
+
+	my $html = $response->content;
+	unless( defined $html ) {
+		carp "No content in response for [$url]!";
+		return;
+		}
+
+	return $html;
 	}
 
 =item fetch_oui_from_cache( MAC )
@@ -314,7 +381,7 @@ Downloads the current list of all OUIs, parses it with C<parse_oui()>,
 and stores it in C<$Cached> anonymous hash keyed by the OUIs (i.e.
 00-0D-93). The C<fetch_oui()> will use this cache if it exists.
 
-By default, this uses C<https://standards.ieee.org/regauth/oui/oui.txt>, 
+By default, this uses C<http://standards-oui.ieee.org/oui.txt>,
 but given an argument, it tries to use that. To load from a local
 file, use the C<file://> scheme.
 
@@ -322,7 +389,7 @@ If C<load_cache> cannot load the data, it issues a warning and returns
 nothing.
 
 This previously used DBM::Deep if it was installed, but that was much
-too slow. Instead, if you want persistence, you can play with 
+too slow. Instead, if you want persistence, you can play with
 C<$Net::MAC::Vendor::Cached> yourself.
 
 If you want to store the data fetched for later use, add a destination
@@ -336,8 +403,9 @@ specify C<undef> as source.
 =item oui_urls
 
 Returns the URLs of the oui.txt resource. The IEEE likes to move this
-around. These are the default URL that C<load_cache> will use, but you 
-can also 
+around. These are the default URL that C<load_cache> will use, but you
+can also supply your own with the C<NET_MAC_VENDOR_OUI_URL> environment
+variable.
 
 =cut
 
@@ -345,11 +413,12 @@ sub oui_url { (grep { /http:/ } &oui_urls)[0] }
 
 sub oui_urls {
 	my @urls = qw(
-		http://www.ieee.org/netstorage/standards/oui.txt
-		https://www.ieee.org/netstorage/standards/oui.txt		
+		http://standards-oui.ieee.org/oui.txt
 	  );
-	  
+
 	unshift @urls, $ENV{NET_MAC_VENDOR_OUI_URL};
+
+	@urls;
 	}
 
 sub load_cache {
@@ -372,7 +441,7 @@ sub load_cache {
 				if( open my $fh, '>', $dest ) {
 					print $fh $data;
 					close $fh;
-					} 
+					}
 				else { # notify on error, but continue
 					carp "Could not write to '$dest'";
 					}
