@@ -243,7 +243,7 @@ MAC.
 sub fetch_oui_from_ieee {
 	my $mac = normalize_mac( shift );
 
-	my @urls = oui_urls();
+	my @urls = "http://standards.ieee.org/cgi-bin/ouisearch?$mac";
 
 	my $html;
 	URL: foreach my $url ( @urls ) {
