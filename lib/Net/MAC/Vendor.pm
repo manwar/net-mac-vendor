@@ -249,7 +249,6 @@ sub fetch_oui_from_ieee {
 	URL: foreach my $url ( @urls ) {
 		$html = _fetch_oui_from_url( $url );
 		next URL unless defined $html;
-		print STDERR "Fetched from [$url]\n";
 		last;
 		}
 
