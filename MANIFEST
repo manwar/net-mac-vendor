@@ -15,6 +15,7 @@ t/fetch_oui.t
 t/fetch_oui_from_ieee.t
 t/load_cache.t
 t/normalize_mac.t
+t/oui.t
 t/parse_oui.t
 t/pod.t
 t/pod_coverage.t
