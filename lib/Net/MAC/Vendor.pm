@@ -522,7 +522,7 @@ sub get_from_cache {
 	$Cached->{ $oui };
 	}
 
-=item get_from_cache
+=item get_cache_hash
 
 Get the hash the built-in cache uses. You should only use this if you
 were using the old C<$Cached> package variable.
