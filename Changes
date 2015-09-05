@@ -1,5 +1,11 @@
 Revision history for Perl module Net::MAC::Vendor
 
+1.24_04 2015-09-05T06:24:15Z
+	* Migrate to Mojolicious for network stuff
+	* Start an abstraction of the cache so others can override it
+	* load_cache no longer falls back. If your source isn't there,
+	it fails.
+
 1.24_02 2015-08-08T07:51:40Z
 	* Update for new IEEE URLs. Again.
 
