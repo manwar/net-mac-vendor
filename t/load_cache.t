@@ -28,7 +28,7 @@ my ($fh, $filename) = tempfile( UNLINK => 1 );
 
 subtest load_cache_default_write => sub {
 	local *STDERR;
-	open STDERR, ">", \my $output;
+	open STDERR, ">:utf8", \my $output;
 	my $rc = Net::MAC::Vendor::load_cache(undef, $filename);
 	ok( $rc, "load_cache returns true for default source with write");
 
