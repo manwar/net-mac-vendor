@@ -1,6 +1,8 @@
 package Net::MAC::Vendor;
 use strict;
 
+use v5.10;
+
 =encoding utf8
 
 =head1 NAME
