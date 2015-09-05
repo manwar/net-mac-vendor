@@ -22,9 +22,7 @@ subtest load_cache_default => sub {
 	ok( $rc, "load_cache returns true for default source");
 	};
 
-
 my ($fh, $filename) = tempfile( UNLINK => 1 );
-
 
 subtest load_cache_default_write => sub {
 	local *STDERR;
