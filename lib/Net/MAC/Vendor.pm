@@ -65,13 +65,10 @@ use Exporter qw(import);
 __PACKAGE__->run( @ARGV ) unless caller;
 
 use Carp;
-use LWP::Simple qw(get);
+use Mojo::URL;
+use Mojo::UserAgent;
 
-our $Cached = {};
-
-our $VERSION = '1.24_02';
-
-my $ua = LWP::UserAgent->new();
+our $VERSION = '1.24_03';
 
 =item run( @macs )
 
@@ -105,11 +102,14 @@ sub run {
 
 =item ua
 
-Return the LWP::UserAgent object used to fetch resources.
+Return the Mojo::UserAgent object used to fetch resources.
 
 =cut
 
-sub ua { $ua }
+sub ua {
+	state $ua = Mojo::UserAgent->new;
+	$ua;
+	}
 
 =item lookup( MAC )
 
@@ -242,14 +242,28 @@ MAC.
 
 =cut
 
+sub _search_url_base {
+	state $url = Mojo::URL->new(
+		'http://standards.ieee.org/cgi-bin/ouisearch'
+		);
+	$url;
+	}
+
+sub _search_url {
+	my( $class, $mac ) = @_;
+	my $url = $class->_search_url_base->clone;
+	$url->query( $mac );
+	}
+
 sub fetch_oui_from_ieee {
 	my $mac = normalize_mac( shift );
 
-	my @urls = "http://standards.ieee.org/cgi-bin/ouisearch?$mac";
+	my @urls = __PACKAGE__->_search_url( $mac );
+say "Search URLs are @urls";
 
 	my $html;
 	URL: foreach my $url ( @urls ) {
-		$html = _fetch_oui_from_url( $url );
+		$html = __PACKAGE__->_fetch_oui_from_url( $url );
 		next URL unless defined $html;
 		last;
 		}
@@ -265,17 +279,17 @@ sub fetch_oui_from_ieee {
 	}
 
 sub _fetch_oui_from_url {
-	my $url = shift;
+	my( $class, $url ) = @_;
 
 	return unless defined $url;
 
-	my $response = $ua->get( $url );
-	unless( $response->is_success ) {
-		carp "Failed fetching [$url]: " . $response->code;
+	my $tx = __PACKAGE__->ua->get( $url );
+	unless( $tx->success ) {
+		carp "Failed fetching [$url]: " . $tx->res->code;
 		return;
 		}
 
-	my $html = $response->content;
+	my $html = $tx->res->body;
 	unless( defined $html ) {
 		carp "No content in response for [$url]!";
 		return;
@@ -302,7 +316,7 @@ If it doesn't find the MAC in the cache, it returns nothing.
 sub fetch_oui_from_cache {
 	my $mac = normalize_mac( shift );
 
-	exists $Cached->{ $mac } ? $Cached->{ $mac } : ();
+	__PACKAGE__->get_from_cache( $mac );
 	}
 
 =item extract_oui_from_html( HTML, OUI )
@@ -329,7 +343,8 @@ sub extract_oui_from_html {
 	return unless defined $ouis;
 	$ouis =~ s/<\/?b>//gs; # remove bold around the OUI
 
-	my @entries = split /\n\s*\n/, $ouis;
+
+	my @entries = split /\v+\s*\v+/, $ouis;
 	return unless defined $entries[0];
 	return $entries[0] unless defined $entries[1];
 
@@ -376,13 +391,34 @@ sub parse_oui {
 	return \@lines;
 	}
 
+=item oui_url
+
+=item oui_urls
+
+Returns the URLs of the oui.txt resource. The IEEE likes to move this
+around. These are the default URL that C<load_cache> will use, but you
+can also supply your own with the C<NET_MAC_VENDOR_OUI_URL> environment
+variable.
+
+=cut
+
+sub oui_url { (grep { /\Ahttp:/ } &oui_urls)[0] }
+
+sub oui_urls {
+	my @urls = 'http://standards-oui.ieee.org/oui.txt';
+
+	unshift @urls, $ENV{NET_MAC_VENDOR_OUI_URL}
+		if defined $ENV{NET_MAC_VENDOR_OUI_URL};
+
+	@urls;
+	}
+
 =item load_cache( [ SOURCE[, DEST ] ] )
 
-Downloads the current list of all OUIs, parses it with C<parse_oui()>,
-and stores it in C<$Cached> anonymous hash keyed by the OUIs (i.e.
-00-0D-93). The C<fetch_oui()> will use this cache if it exists.
+Downloads the current list of all OUIs in SOURCE, parses it with C<parse_oui()>,
+and stores it in the cache. The C<fetch_oui()> will use this cache if it exists.
 
-By default, this uses C<http://standards-oui.ieee.org/oui.txt>,
+By default, this uses the URL from C<oui_url>,
 but given an argument, it tries to use that. To load from a local
 file, use the C<file://> scheme.
 
@@ -399,56 +435,33 @@ specify C<undef> as source.
 
 =cut
 
-=item oui_url
-
-=item oui_urls
-
-Returns the URLs of the oui.txt resource. The IEEE likes to move this
-around. These are the default URL that C<load_cache> will use, but you
-can also supply your own with the C<NET_MAC_VENDOR_OUI_URL> environment
-variable.
-
-=cut
-
-sub oui_url { (grep { /http:/ } &oui_urls)[0] }
-
-sub oui_urls {
-	my @urls = "http://standards-oui.ieee.org/oui.txt";
-
-	unshift @urls, $ENV{NET_MAC_VENDOR_OUI_URL};
-
-	@urls;
-	}
-
 sub load_cache {
-	my $source = shift || oui_url();
-	my $dest   = shift;
+	my( $source, $dest ) = @_;
 
-	my $data = do {
-		if( -e $source ) { # local files
-			do { local( @ARGV, $/ ) = $source; <> }
-			}
-		else { # everything else
-			my $data = get( $source );
-
-			unless( defined $data ) {
-				carp "Could not read from '$source'";
+	my $data = do {;
+		if( defined $source ) {
+			unless( -e $source ) {
+				carp "Net::Mac::Vendor cache source [$source] does not exist";
 				return;
 				}
 
-			if ( $dest ) { # store cache
-				if( open my $fh, '>', $dest ) {
-					print $fh $data;
-					close $fh;
-					}
-				else { # notify on error, but continue
-					carp "Could not write to '$dest'";
-					}
-				}
-
-			$data;
+			do { local( @ARGV, $/ ) = $source; <> }
+			}
+		else {
+			__PACKAGE__->ua->get( oui_url() )->res->body;
 			}
 		};
+
+	if( defined $dest ) {
+		if( open my $fh, '>:utf8', $dest ) {
+			print { $fh } $data;
+			close $fh;
+			}
+		else { # notify on error, but continue
+			carp "Could not write to '$dest': $!";
+			}
+		}
+
 
 	# The PRIVATE entries fill in a template with no
 	# company name or address, but the whitespace is
@@ -461,15 +474,51 @@ sub load_cache {
 
 	my $count = '';
 	foreach my $entry ( @entries ) {
-	#	print STDERR "Processing ", ++$count, " entries\n";
 		$entry =~ s/^\s+//;
 		my $oui = substr $entry, 0, 8;
-		$Cached->{ $oui } = parse_oui( $entry );
-		#last if $count > 100;
+		__PACKAGE__->add_to_cache( parse_oui( $entry ) );
 		}
 
 	return 1;
 	}
+
+=back
+
+=head1 Caching
+
+=over 4
+
+=cut
+
+BEGIN {
+my $Cached = {};
+
+=item add_to_cache
+
+Add to the cache. This is mostly in place for a future expansion to
+full objects so you can override this in a subclass.
+
+=cut
+
+sub add_to_cache {
+	my( $class, $oui, $parsed ) = @_;
+
+	$Cached->{ $oui } = $parsed;
+	}
+
+=item get_from_cache
+
+Get from the cache. This is mostly in place for a future expansion to
+full objects so you can override this in a subclass.
+
+=cut
+
+sub get_from_cache {
+	my( $class, $oui ) = @_;
+
+	$Cached->{ $oui };
+	}
+}
 
 =back
 
