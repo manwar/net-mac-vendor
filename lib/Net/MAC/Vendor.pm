@@ -486,6 +486,9 @@ sub load_cache {
 
 =head1 Caching
 
+Eventually I want people to write their own caching classes so I've
+created some class methods for this.
+
 =over 4
 
 =cut
@@ -518,6 +521,15 @@ sub get_from_cache {
 
 	$Cached->{ $oui };
 	}
+
+=item get_from_cache
+
+Get the hash the built-in cache uses. You should only use this if you
+were using the old C<$Cached> package variable.
+
+=cut
+
+sub get_cache_hash { $Cached }
 }
 
 =back
