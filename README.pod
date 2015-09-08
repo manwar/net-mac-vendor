@@ -7,6 +7,10 @@
 =for HTML
 <a href='https://coveralls.io/github/briandfoy/net-mac-vendor?branch=master'><img src='https://coveralls.io/repos/briandfoy/net-mac-vendor/badge.svg?branch=master&service=github' alt='Coverage Status' /></a>
 
+=for HTML <img src="https://img.shields.io/cpan/l/Net-MAC-Vendor.svg" />
+
+=for HTML <img src="https://img.shields.io/cpan/v/Config-Augeas.svg" />
+
 =head1 The Net::MAC::Vendor module
 
 This is the I<README> for the L<Net::MAC::Vendor> Perl module. This
