@@ -7,9 +7,9 @@
 =for HTML
 <a href='https://coveralls.io/github/briandfoy/net-mac-vendor?branch=master'><img src='https://coveralls.io/repos/briandfoy/net-mac-vendor/badge.svg?branch=master&service=github' alt='Coverage Status' /></a>
 
-=for HTML <img src="https://img.shields.io/cpan/l/Net-MAC-Vendor.svg" />
+=for HTML <a href="https://github.com/briandfoy/net-mac-vendor/blob/master/LICENSE"><img src="https://img.shields.io/cpan/l/Net-MAC-Vendor.svg" /></a>
 
-=for HTML <img src="https://img.shields.io/cpan/v/Net-MAC-Vendor.svg" />
+=for HTML <a href="http://www.metacpan.org/module/Net::MAC::Vendor"><img src="https://img.shields.io/cpan/v/Net-MAC-Vendor.svg" /></A>
 
 =head1 The Net::MAC::Vendor module
 
