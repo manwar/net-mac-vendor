@@ -9,7 +9,7 @@
 
 =for HTML <img src="https://img.shields.io/cpan/l/Net-MAC-Vendor.svg" />
 
-=for HTML <img src="https://img.shields.io/cpan/v/Config-Augeas.svg" />
+=for HTML <img src="https://img.shields.io/cpan/v/Net-MAC-Vendor.svg" />
 
 =head1 The Net::MAC::Vendor module
 
