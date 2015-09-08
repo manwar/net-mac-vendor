@@ -1,5 +1,9 @@
 Revision history for Perl module Net::MAC::Vendor
 
+1.25 2015-09-08T08:25:40Z
+	* Bump to user version
+	* CPAN Testers is down, so I hope this works.
+
 1.24_04 2015-09-05T06:24:15Z
 	* Migrate to Mojolicious for network stuff
 	* Start an abstraction of the cache so others can override it
