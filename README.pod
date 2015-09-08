@@ -4,6 +4,9 @@
 
 =for HTML <a href="https://travis-ci.org/briandfoy/net-mac-vendor"><img src="https://travis-ci.org/briandfoy/net-mac-vendor.svg?branch=master"></a>
 
+=for HTML
+<a href='https://coveralls.io/github/briandfoy/net-mac-vendor?branch=master'><img src='https://coveralls.io/repos/briandfoy/net-mac-vendor/badge.svg?branch=master&service=github' alt='Coverage Status' /></a>
+
 =head1 The Net::MAC::Vendor module
 
 This is the I<README> for the L<Net::MAC::Vendor> Perl module. This
