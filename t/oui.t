@@ -2,6 +2,8 @@ use Test::More 0.98;
 
 my $class = 'Net::MAC::Vendor';
 
+diag( "Some tests have to fetch data files and can take a long time" );
+
 subtest setup => sub {
 	use_ok( $class );
 	can_ok( $class, qw(oui_url oui_urls) );

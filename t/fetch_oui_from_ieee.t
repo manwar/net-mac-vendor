@@ -3,6 +3,8 @@ use Test::More 0.98;
 use Data::Dumper;
 my $class = 'Net::MAC::Vendor';
 
+diag( "Some tests have to fetch data files and can take a long time" );
+
 subtest setup => sub {
 	use_ok( $class );
 	ok( defined &{"${class}::fetch_oui_from_ieee"}, "&fetch_oui_from_ieee is defined" );

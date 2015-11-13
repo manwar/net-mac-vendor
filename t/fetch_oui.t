@@ -5,6 +5,8 @@ use Test::More 0.98;
 
 my $class = 'Net::MAC::Vendor';
 
+diag( "Some tests have to fetch data files and can take a long time" );
+
 subtest status => sub {
 	use_ok( $class );
 	can_ok( $class, 'fetch_oui' );
