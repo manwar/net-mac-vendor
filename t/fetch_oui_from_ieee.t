@@ -9,15 +9,13 @@ subtest setup => sub {
 	};
 
 subtest fetch => sub {
-	my $array = Net::MAC::Vendor::fetch_oui_from_ieee( '00:01:02' );
+	my $array = Net::MAC::Vendor::fetch_oui_from_ieee( '14:10:9F' );
 	isa_ok( $array, ref [], "Got back array reference" );
 #	diag( "Array from fetch_oui_from_ieee is " . Dumper( $array ) );
 
 	my $html = join "\n", @$array;
 
-	like( $html, qr/3COM CORPORATION/, "Fetched 3M's OUI entry" );
-
-	unlike( $html, qr/PRIVATE/, "Still see PRIVATE in 3M entry" );
+	like( $html, qr/Apple, Inc\./, "Fetched Apple's OUI entry" );
 	};
 
 done_testing();
