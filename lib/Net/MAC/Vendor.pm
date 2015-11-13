@@ -370,7 +370,7 @@ With no arguments, it returns an empty anonymous array.
 sub parse_oui {
 	my $oui = shift;
 	return [] unless $oui;
-
+	$oui =~ s|</?b>||g;
 	my @lines = map { s/^\s+//; $_ ? $_ : () } split /$/m, $oui;
 	splice @lines, 1, 1, ();
 
