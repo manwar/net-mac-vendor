@@ -36,9 +36,9 @@ my $lines =
 
 subtest fetch_apple => sub {
 	SKIP: {
-		skip "Can't connect to the IEEE web site", 4 unless $connected;
-
 		my $parsed = Net::MAC::Vendor::fetch_oui( $ouis[0] );
+		skip "Can't connect to the IEEE web site for $ouis[0]", 4 unless defined $parsed;
+
 		isa_ok( $parsed, ref [] );
 		foreach my $i ( 0 .. $#$parsed ) {
 			is( $parsed->[$i], $lines->[$i], "Line $i matches for $ouis[0]" );
@@ -48,11 +48,16 @@ subtest fetch_apple => sub {
 
 subtest fetch_all => sub {
 	foreach my $oui ( @ouis ) {
-		my $parsed = Net::MAC::Vendor::fetch_oui( $oui );
-		isa_ok( $parsed, ref [] );
-		foreach my $i ( 0 .. $#$parsed ) {
-			is( $parsed->[$i], $lines->[$i], "Line $i matches for $oui" );
-			}
+		subtest $oui => sub {
+			my $parsed = Net::MAC::Vendor::fetch_oui( $oui );
+			SKIP:{
+				skip "Can't connect to the IEEE web site for $oui", 4+1 unless defined $parsed;
+				isa_ok( $parsed, ref [] );
+				foreach my $i ( 0 .. $#$parsed ) {
+					is( $parsed->[$i], $lines->[$i], "Line $i matches for $oui" );
+					}
+				}
+			};
 		}
 	};
 
