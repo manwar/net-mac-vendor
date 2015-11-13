@@ -259,7 +259,6 @@ sub fetch_oui_from_ieee {
 	my $mac = normalize_mac( shift );
 
 	my @urls = __PACKAGE__->_search_url( $mac );
-say "Search URLs are @urls";
 
 	my $html;
 	URL: foreach my $url ( @urls ) {
