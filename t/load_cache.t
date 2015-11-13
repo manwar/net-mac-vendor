@@ -20,8 +20,11 @@ subtest setup => sub {
 subtest bad_source => sub {
 	local *STDERR;
 	open STDERR, ">", \my $output;
-	my $rc = Net::MAC::Vendor::load_cache( 'not_there.txt' );
-	is( $rc, undef, "load_cache returns undef for bad source [not_there.txt]");
+
+	my $file = 'not_there.txt';
+	ok( ! -f $file, "The file that shouldn't be there isn't there [$file]" );
+	my $rc = Net::MAC::Vendor::load_cache( $file );
+	is( $rc, undef, "load_cache returns undef for bad source [$file]");
 	};
 
 subtest load_cache_default => sub {
