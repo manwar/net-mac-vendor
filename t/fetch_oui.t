@@ -30,8 +30,8 @@ my $lines =
 	[
 	'Apple, Inc.',
 	'1 Infinite Loop',
-	'Cupertino CA 95014',
-	'UNITED STATES',
+	'CUPERTINO  CA  95014',
+	'US',
 	];
 
 subtest fetch_apple => sub {
