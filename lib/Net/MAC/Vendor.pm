@@ -107,7 +107,7 @@ Return the Mojo::UserAgent object used to fetch resources.
 =cut
 
 sub ua {
-	state $ua = Mojo::UserAgent->new;
+	state $ua = Mojo::UserAgent->new->max_redirects(3);
 	$ua;
 	}
 
