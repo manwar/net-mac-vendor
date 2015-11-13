@@ -3,6 +3,15 @@ use File::Temp qw/ tempfile /;
 
 my $class = 'Net::MAC::Vendor';
 
+diag( "These tests download big files and may take several minutes" );
+diag( "We skip these tests unless you set RUN_CACHE_TESTS" );
+
+unless( defined $ENV{RUN_CACHE_TESTS} ) {
+	pass();
+	done_testing();
+	exit;
+	}
+
 subtest setup => sub {
 	use_ok( $class );
 	ok( defined &{"${class}::load_cache"}, "&load_cache is defined" );
