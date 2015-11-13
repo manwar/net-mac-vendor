@@ -334,32 +334,11 @@ sub extract_oui_from_html {
 	my $html = shift;
 	my $lookup_mac = normalize_mac( shift );
 
-	$html =~ s/<pre>.*?$lookup_mac/<pre>$lookup_mac/is;
+	my( $record ) = $html =~ m|<pre>(<b>$lookup_mac</b>.*?)</pre>|is;
+	$record =~ s|</?b>||g;
 
-	# sometimes the HTML returns more than one OUI because
-	# IEEE has a problem parsing their own data when they
-	# have private blocks
-	my( $ouis ) = $html =~ m|<pre>(.*?)</pre>|gs;
-	return unless defined $ouis;
-	$ouis =~ s/<\/?b>//gs; # remove bold around the OUI
-
-
-	my @entries = split /\v+\s*\v+/, $ouis;
-	return unless defined $entries[0];
-	return $entries[0] unless defined $entries[1];
-
-	my $result = $entries[0];
-
-	foreach my $entry ( @entries ) {
-		$entry =~ s/^\s+|\s+$//;
-		my $found_mac = normalize_mac( substr $entry, 0, 8 );
-		if( $found_mac eq $lookup_mac ) {
-			$result = $entry;
-			last;
-			}
-		}
-
-	return $result;
+	return unless defined $record;
+	return $record;
 	}
 
 =item parse_oui( STRING )
