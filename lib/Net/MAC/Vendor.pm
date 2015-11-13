@@ -435,7 +435,11 @@ sub load_cache {
 			do { local( @ARGV, $/ ) = $source; <> }
 			}
 		else {
-			__PACKAGE__->ua->get( oui_url() )->res->body;
+			#say time . " Fetching URL";
+			my $tx = __PACKAGE__->ua->get( oui_url() );
+			#say time . " Fetched URL";
+			#say "size is " . $tx->res->headers->header( 'content-length' );
+			$tx->res->body;
 			}
 		};
 
