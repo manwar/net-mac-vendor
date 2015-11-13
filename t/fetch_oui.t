@@ -18,7 +18,7 @@ subtest cache_unlinked => sub {
 my $connected = 0;
 subtest connected => sub {
 	my $tx = $class->ua->head( Net::MAC::Vendor::oui_url() );
-	$connected = $tx->success;
+	$connected = $tx->success && $tx->res->code;
 	ok( $connected, "Am connected to network [$connected]" );
 	};
 
