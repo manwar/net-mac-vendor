@@ -279,22 +279,31 @@ sub fetch_oui_from_ieee {
 
 sub _fetch_oui_from_url {
 	my( $class, $url ) = @_;
+	my $tries = 0;
 
 	return unless defined $url;
 
-	my $tx = __PACKAGE__->ua->get( $url );
-	unless( $tx->success ) {
-		carp "Failed fetching [$url]: " . $tx->res->code;
-		return;
-		}
+	TRY: {
+		my $tx = __PACKAGE__->ua->get( $url );
+		unless( $tx->success ) {
+			if( $tries > 3 ) {
+				carp "Failed fetching [$url]: " . $tx->res->code;
+				return;
+				}
 
-	my $html = $tx->res->body;
-	unless( defined $html ) {
-		carp "No content in response for [$url]!";
-		return;
-		}
+			$tries++;
+			sleep 1 * $tries;
+			redo TRY;
+			}
 
-	return $html;
+		my $html = $tx->res->body;
+		unless( defined $html ) {
+			carp "No content in response for [$url]!";
+			return;
+			}
+
+		return $html;
+		}
 	}
 
 =item fetch_oui_from_cache( MAC )
