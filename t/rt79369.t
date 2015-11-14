@@ -2,6 +2,17 @@ use Test::More 0.98;
 use strict;
 use warnings;
 
+=pod
+
+I think the data file format that caused this problem no longer
+exists in their data, so this is historical
+
+=cut
+
+pass();
+done_testing();
+exit;
+
 use File::Spec::Functions;
 
 my $class = 'Net::MAC::Vendor';

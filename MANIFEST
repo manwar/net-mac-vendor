@@ -19,7 +19,6 @@ t/oui.t
 t/parse_oui.t
 t/pod.t
 t/pod_coverage.t
-t/rt79369.t
 t/run.t
 t/test_manifest
 xt/changes.t

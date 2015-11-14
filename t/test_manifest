@@ -9,4 +9,3 @@ parse_oui.t
 fetch_oui.t
 load_cache.t
 run.t
-rt79369.t

@@ -66,3 +66,7 @@ mac_oui\.db
 
 # don't distribute the old OUI files
 extras/.*\.gz
+
+# this doesn't seem to be a problem anymore, and it not being a
+# problem is a problem
+rt79369\.t
