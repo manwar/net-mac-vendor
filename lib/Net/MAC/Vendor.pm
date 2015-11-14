@@ -197,6 +197,10 @@ To avoid multiple calls on the network, use C<load_cache> to preload
 the entire OUI space into an in-memory cache. This can take a long
 time over a slow network, though; the file is about 60,000 lines.
 
+Also, the IEEE website has been flaky lately, so loading the cache is
+better. This distribution comes with several versions of the complete
+OUI data file.
+
 =cut
 
 sub fetch_oui {
