@@ -67,7 +67,7 @@ subtest fetch_all => sub {
 subtest load_from_cache => sub {
 	require Cwd;
 	require File::Spec;
-	my $path = File::Spec->catfile( Cwd::cwd(), "extras/oui-20150808.txt" );
+	my $path = File::Spec->catfile( Cwd::cwd(), "extras/oui-20151113.txt" );
 	diag( "File path is $path" );
 	ok( -e $path, "Cached file exists" );
 
