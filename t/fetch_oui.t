@@ -53,7 +53,7 @@ subtest fetch_all => sub {
 		subtest $oui => sub {
 			my $parsed = Net::MAC::Vendor::fetch_oui( $oui );
 			SKIP:{
-				skip "Can't connect to the IEEE web site for $oui", 4+1 unless defined $parsed;
+				skip "Can't connect to the IEEE web site for $oui. Sometimes that happens.", 4+1 unless defined $parsed;
 				isa_ok( $parsed, ref [] );
 				foreach my $i ( 0 .. $#$parsed ) {
 					is( $parsed->[$i], $lines->[$i], "Line $i matches for $oui" );
