@@ -1,5 +1,9 @@
 Revision history for Perl module Net::MAC::Vendor
 
+1.25_01 2015-11-18T04:55:45Z
+	* If the tests can't connect to the fragile IEEE service,
+	don't freak out.
+
 1.25 2015-09-08T08:25:40Z
 	* Bump to user version
 	* CPAN Testers is down, so I hope this works.
