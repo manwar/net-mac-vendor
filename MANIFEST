@@ -1,6 +1,7 @@
 Changes
 examples/README
 extras/oui-20150808.txt
+extras/oui-20151113.txt
 extras/oui-small.txt
 INSTALL.SKIP
 lib/Net/MAC/Vendor.pm
