@@ -1,5 +1,8 @@
 Revision history for Perl module Net::MAC::Vendor
 
+1.26 2015-11-23T04:38:00Z
+	* Bump to stable release
+
 1.25_01 2015-11-18T04:55:45Z
 	* If the tests can't connect to the fragile IEEE service,
 	don't freak out.
