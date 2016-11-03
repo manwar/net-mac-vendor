@@ -471,7 +471,7 @@ sub load_cache {
 	foreach my $entry ( @entries ) {
 		$entry =~ s/^\s+//;
 		my $oui = substr $entry, 0, 8;
-		__PACKAGE__->add_to_cache( parse_oui( $entry ) );
+		__PACKAGE__->add_to_cache( $oui, parse_oui( $entry ) );
 		}
 
 	return 1;
