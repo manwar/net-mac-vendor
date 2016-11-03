@@ -54,6 +54,14 @@ There are older copies of the OUI file in the GitHub repository.
 
 These files are large (about 4MB), so you might want to cache a copy.
 
+A different source of information is linuxnet.ca that publishes sanitized
+and compressed versions of the list, such as:
+
+        http://linuxnet.ca/ieee/oui.txt.bz2
+
+The module can read and decompress compressed versions (as long as the url
+reflects the compression type in the filename as the linuxnet.ca links do).
+
 =head2 Functions
 
 =over 4
@@ -67,6 +75,9 @@ __PACKAGE__->run( @ARGV ) unless caller;
 use Carp;
 use Mojo::URL;
 use Mojo::UserAgent;
+
+use Compress::Bzip2 qw(memBunzip);
+use Compress::Zlib qw(memGunzip);
 
 our $VERSION = '1.26';
 
@@ -413,6 +424,9 @@ By default, this uses the URL from C<oui_url>,
 but given an argument, it tries to use that. To load from a local
 file, use the C<file://> scheme.
 
+If the url indicates that the data is compressed, the response content is 
+decompressed before being stored.
+
 If C<load_cache> cannot load the data, it issues a warning and returns
 nothing.
 
@@ -440,10 +454,13 @@ sub load_cache {
 			}
 		else {
 			#say time . " Fetching URL";
-			my $tx = __PACKAGE__->ua->get( oui_url() );
+			my $url = oui_url();
+			my $tx = __PACKAGE__->ua->get( $url );
 			#say time . " Fetched URL";
 			#say "size is " . $tx->res->headers->header( 'content-length' );
-			$tx->res->body;
+			($url =~ /\.bz2/) ? memBunzip($tx->res->body) :
+			($url =~ /\.gz/)  ? memGunzip($tx->res->body) :
+			                    $tx->res->body;
 			}
 		};
 
