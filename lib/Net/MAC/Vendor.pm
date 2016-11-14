@@ -491,7 +491,7 @@ created some class methods for this.
 BEGIN {
 my $Cached = {};
 
-=item add_to_cache
+=item add_to_cache( OUI, PARSED_DATA )
 
 Add to the cache. This is mostly in place for a future expansion to
 full objects so you can override this in a subclass.
@@ -504,7 +504,7 @@ sub add_to_cache {
 	$Cached->{ $oui } = $parsed;
 	}
 
-=item get_from_cache
+=item get_from_cache( OUI )
 
 Get from the cache. This is mostly in place for a future expansion to
 full objects so you can override this in a subclass.
@@ -517,7 +517,7 @@ sub get_from_cache {
 	$Cached->{ $oui };
 	}
 
-=item get_cache_hash
+=item get_cache_hash()
 
 Get the hash the built-in cache uses. You should only use this if you
 were using the old C<$Cached> package variable.
