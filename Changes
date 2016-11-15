@@ -1,5 +1,8 @@
 Revision history for Perl module Net::MAC::Vendor
 
+1.260_01 2016-11-14T16:07:53Z
+	* Fix issue with cache loading (Github #11 https://github.com/briandfoy/net-mac-vendor/issues/11)
+
 1.26 2015-11-23T04:38:00Z
 	* Bump to stable release
 

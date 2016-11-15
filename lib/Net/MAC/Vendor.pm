@@ -80,8 +80,6 @@ use Mojo::UserAgent;
 
 our $VERSION = '1.260_01';
 
-our $VERSION = '1.26';
-
 =item run( @macs )
 
 If I call this module as a script, this class method automatically
