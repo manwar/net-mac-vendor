@@ -235,7 +235,7 @@ sub fetch_oui_from_custom {
 
 	return unless defined $url;
 
-	my $html = get( $url );
+	my $html = __PACKAGE__->ua->get( $url );
 	unless( defined $html ) {
 		carp "Could not fetch data from the IEEE!";
 		return;
