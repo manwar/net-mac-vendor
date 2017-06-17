@@ -257,16 +257,19 @@ MAC.
 =cut
 
 sub _search_url_base {
+# https://services13.ieee.org/RST/standards-ra-web/rest/assignments/download/?registry=MA-L&format=html&text=00-0D-93
 	state $url = Mojo::URL->new(
-		'http://standards.ieee.org/cgi-bin/ouisearch'
+		'https://services13.ieee.org/RST/standards-ra-web/rest/assignments/download/?registry=MA-L&format=html'
 		);
+
 	$url;
 	}
 
 sub _search_url {
 	my( $class, $mac ) = @_;
 	my $url = $class->_search_url_base->clone;
-	$url->query( $mac );
+	$url->query->merge( text => $mac );
+	$url;
 	}
 
 sub fetch_oui_from_ieee {
