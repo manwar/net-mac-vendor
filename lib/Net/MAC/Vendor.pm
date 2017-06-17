@@ -78,7 +78,7 @@ use Compress::Zlib  qw(memGunzip);
 use Mojo::URL;
 use Mojo::UserAgent;
 
-our $VERSION = '1.260_02';
+our $VERSION = '1.260_03';
 
 =item run( @macs )
 
