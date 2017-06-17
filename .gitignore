@@ -31,3 +31,4 @@ inc/
 mac_oui.db
 nytprof.out
 pm_to_blib
+Net-*
