@@ -78,7 +78,7 @@ use Compress::Zlib  qw(memGunzip);
 use Mojo::URL;
 use Mojo::UserAgent;
 
-our $VERSION = '1.260_03';
+our $VERSION = '1.260_04';
 
 =item run( @macs )
 
@@ -235,7 +235,7 @@ sub fetch_oui_from_custom {
 
 	return unless defined $url;
 
-	my $html = __PACKAGE__->ua->get( $url );
+	my $html = __PACKAGE__->_fetch_oui_from_url( $url );
 	unless( defined $html ) {
 		carp "Could not fetch data from the IEEE!";
 		return;
