@@ -565,7 +565,8 @@ brian d foy C<< <bdfoy@cpan.org> >>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright © 2004-2015, brian d foy C<< <bdfoy@cpan.org> >>. All rights reserved.
+Copyright © 2004-2017, brian d foy C<< <bdfoy@cpan.org> >>. All rights
+reserved.
 
 This program is free software; you can redistribute it under the
 Artistic License 2.0. A license file should have come with this
