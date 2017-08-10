@@ -420,15 +420,15 @@ sub oui_urls {
 
 =item load_cache( [ SOURCE[, DEST ] ] )
 
-Downloads the current list of all OUIs in SOURCE, parses it with C<parse_oui()>,
-and stores it in the cache. The C<fetch_oui()> will use this cache if it exists.
+Downloads the current list of all OUIs in SOURCE, parses it with
+C<parse_oui()>, and stores it in the cache. The C<fetch_oui()> will
+use this cache if it exists.
 
-By default, this uses the URL from C<oui_url>,
-but given an argument, it tries to use that. To load from a local
-file, use the C<file://> scheme.
+By default, this uses the URL from C<oui_url>, but given an argument,
+it tries to use that.
 
-If the url indicates that the data is compressed, the response content is
-decompressed before being stored.
+If the url indicates that the data is compressed, the response content
+is decompressed before being stored.
 
 If C<load_cache> cannot load the data, it issues a warning and returns
 nothing.
