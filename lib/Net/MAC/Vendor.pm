@@ -1,6 +1,6 @@
 package Net::MAC::Vendor;
 use strict;
-
+use warnings;
 use v5.10;
 
 =encoding utf8
